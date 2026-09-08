@@ -81,7 +81,7 @@
           background: var(--photo, var(--spb-photo)) center / cover no-repeat, #3A3532; padding: 32px 10px 10px; }
   .trip .shade { position: absolute; inset: 0; background: linear-gradient(180deg, #000 0%, rgba(0,0,0,0.15) 100%); opacity: 0.7; pointer-events: none; }   /* то же затемнение, что на экране поездки */
   .trip-title { position: relative; text-align: center; padding: 0 56px; }
-  .trip-title .h1 { overflow-wrap: anywhere; line-height: 1.2; }
+  .trip-title .h1 { overflow-wrap: break-word; line-height: 1.2; }
   .trip-title .cap { margin-top: 6px; font-weight: 700; }
   .trip .share { position: absolute; top: 10px; right: 10px; }
   .preview { position: relative; margin-top: 34px; display: flex; flex-direction: column; gap: 10px; }
@@ -130,8 +130,8 @@
   .stay-top { display: flex; gap: 14px; min-height: 70px; padding-right: 44px; }   /* место под пин; под карандаш — только там, где он есть */
   .is-trip .cards .stay-top, #favList .stay-top { padding-right: 88px; }
   .stay-photo { width: 70px; height: 70px; flex: none; border-radius: var(--r-photo); overflow: hidden; background: linear-gradient(135deg,#EDEDED,#D9D9D9) center / cover no-repeat; }
-  .stay-info { display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; min-height: 70px; min-width: 0; }
-  .stay-info > .cap:first-child { margin-top: -2px; line-height: 1.3; overflow-wrap: anywhere; }
+  .stay-info { display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; min-height: 70px; min-width: 0; flex: 1 1 auto; }
+  .stay-info > .cap:first-child { margin-top: -2px; line-height: 1.3; overflow-wrap: break-word; }
   .pill-fill { border: 0; position: relative; overflow: hidden; font-size: 12px; font-weight: 500; height: 32px; width: 73px; border-radius: var(--r-tag); background: var(--accent); color: var(--white); display: inline-flex; align-items: center; justify-content: center; }
   .pill-fill .shine { position: absolute; top: 0; bottom: 0; width: 60%; left: 0; pointer-events: none; transform: translateX(-160%);
                       background: linear-gradient(105deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.45) 50%, rgba(255,255,255,0) 100%); }
@@ -141,7 +141,7 @@
   .col { display: flex; flex-direction: column; align-items: flex-start; } .col.right { align-items: flex-end; text-align: right; }
   .label { color: var(--label); } .col .big { margin-top: 7px; } .col .sub { margin-top: 8px; }
   .address { margin-top: 16px; display: flex; flex-direction: column; position: relative; padding-right: 30px; }
-  .address .text { margin-top: 7px; line-height: 1.3; overflow-wrap: anywhere; }
+  .address .text { margin-top: 7px; line-height: 1.3; overflow-wrap: break-word; }
   .copy { position: absolute; top: -1px; right: 0; width: 14px; height: 14px; border: 0; background: none; padding: 0; color: var(--accent); display: grid; place-items: center; }
   .copy::before { content: ''; position: absolute; inset: -10px; }
   .toast { position: absolute; right: 0; top: -28px; padding: 6px 10px; border-radius: 8px; background: var(--black); color: var(--white); font-size: 12px; opacity: 0; pointer-events: none; }
@@ -153,14 +153,14 @@
   .is-trip .cards .act-top, #favList .act-top { padding-right: 84px; }
   #favList .act-top { padding-right: 126px; }
   .act-tile { width: 36px; height: 36px; flex: none; border-radius: var(--r-photo); background: var(--act-tile); display: grid; place-items: center; font-size: 22px; line-height: 1; color: #000; }
-  .act-name { display: flex; flex-direction: column; gap: 6px; padding-top: 2px; min-width: 0; }
-  .act-name .h1 { font-size: 12px; } .act-name .h1, .act-name .cap { line-height: 1.3; overflow-wrap: anywhere; }
+  .act-name { display: flex; flex-direction: column; gap: 6px; padding-top: 2px; min-width: 0; flex: 1 1 auto; }
+  .act-name .h1 { font-size: 12px; } .act-name .h1, .act-name .cap { line-height: 1.3; overflow-wrap: break-word; }
   .act-name .cap { color: var(--act-note); font-style: italic; }
   .act .pin { background: var(--act-tile); top: 19px; right: 19px; color: #000; }
-  .act-desc { margin-top: 18px; font-size: 12px; line-height: 20px; overflow-wrap: anywhere; }
+  .act-desc { margin-top: 18px; font-size: 12px; line-height: 20px; overflow-wrap: break-word; }
   .act-rows { margin-top: 18px; display: flex; flex-direction: column; gap: 10px; }
   .act-row { display: flex; align-items: flex-start; gap: 16px; min-height: 20px; }
-  .act-row .cap { line-height: 20px; overflow-wrap: anywhere; min-width: 0; } .act-row .cap b { font-weight: 700; }
+  .act-row .cap { line-height: 20px; overflow-wrap: break-word; min-width: 0; } .act-row .cap b { font-weight: 700; }
   .chip { width: 67.5px; height: 20px; border-radius: 4px; display: grid; place-items: center; font-size: 10px; font-weight: 500; flex: none; }
   .chip.ticket { background: var(--chip-ticket); color: var(--chip-ticket-text, #fff); }
   .chip.when   { background: var(--chip-when);   color: var(--chip-when-text, #fff); }
@@ -169,22 +169,21 @@
   /* ===== День — короткий разделитель ===== */
   .day { padding: 15px 19px; min-height: 0; background: var(--act-bg); color: var(--act-text, var(--white)); border: 1px solid var(--act-border, rgba(255,255,255,0.2));
          -webkit-backdrop-filter: blur(var(--panel-blur)); backdrop-filter: blur(var(--panel-blur)); }
-  .day-top { display: flex; align-items: center; gap: 14px; padding-right: 44px; }
+  .day-top { display: flex; align-items: center; gap: 14px; }
+  .is-trip .cards .day-top { padding-right: 44px; }
   .day .act-tile { width: 44px; height: 44px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 16px; font-weight: 600; line-height: 1; gap: 2px; }
   .day .act-tile small { font-size: 9px; font-weight: 500; letter-spacing: 0.02em; }
-  .day-info { min-width: 0; display: flex; flex-direction: column; gap: 6px; }
-  .day-info .h1 { font-size: 12px; line-height: 1.3; overflow-wrap: anywhere; }
+  .day-info { min-width: 0; flex: 1 1 auto; display: flex; flex-direction: column; gap: 6px; }
+  .day-info .h1 { font-size: 12px; line-height: 1.3; overflow-wrap: break-word; }
   .day-info .cap { color: var(--act-note); font-style: italic; line-height: 1.3; }
-  .day-plan { margin-top: 12px; font-size: 12px; line-height: 20px; overflow-wrap: anywhere; }
+  .day-plan { margin-top: 12px; font-size: 12px; line-height: 20px; overflow-wrap: break-word; }
   .day-plan:empty { display: none; }
   .day .edit-btn { right: 13px; top: 19px; background: rgba(0,0,0,0.12); }
-  .day .emoji-mark { position: absolute; right: 19px; top: 19px; font-size: 22px; line-height: 36px; }
-  .is-trip .cards .day .emoji-mark, #favList .day .emoji-mark { display: none; }
 
   /* ===== Заметка ===== */
   .note-card { padding: 19px; min-height: 0; background: var(--act-bg); color: var(--act-text, var(--white)); border: 1px solid var(--act-border, rgba(255,255,255,0.2));
                -webkit-backdrop-filter: blur(var(--panel-blur)); backdrop-filter: blur(var(--panel-blur)); }
-  .note-body { margin-top: 16px; font-size: 12px; line-height: 20px; overflow-wrap: anywhere; display: flex; flex-direction: column; gap: 6px; }
+  .note-body { margin-top: 16px; font-size: 12px; line-height: 20px; overflow-wrap: break-word; display: flex; flex-direction: column; gap: 6px; }
   .note-body p { margin: 0; }
   .note-body ul { margin: 0; padding-left: 18px; }
   .note-body li { margin: 0; }
@@ -272,6 +271,17 @@
   .check { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--panel-border); font-size: 12px; }
   .check input { width: 18px; height: 18px; accent-color: var(--accent); }
 
+
+  /* ===== Диалог в стиле приложения (вместо системных confirm/alert) ===== */
+  .dlg-wrap { position: fixed; inset: 0; z-index: 40; display: none; align-items: center; justify-content: center; padding: 24px; }
+  .dlg-dim { position: absolute; inset: 0; background: rgba(0,0,0,0.4); }
+  .dlg { position: relative; width: 100%; max-width: 320px; background: var(--white); border-radius: 20px; padding: 24px 20px 20px; text-align: center; }
+  .dlg .h1 { line-height: 1.3; }
+  .dlg .hint { margin-top: 8px; }
+  .dlg-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+  .dlg-actions .btn-soft { justify-content: center; }
+  .dlg-actions .primary { margin-top: 0; }
+  .dlg-actions .primary.red { background: #B43831; }
 
   /* ===== Скелет загрузки ===== */
   .skeleton { position: fixed; inset: 0; padding: var(--top) 20px 20px; background: var(--white); z-index: 30; }
@@ -452,7 +462,6 @@
         <div class="act-tile" aria-hidden="true"><span class="num"></span><small class="dow"></small></div>
         <div class="day-info"><span class="h1 area"></span><span class="cap date"></span></div>
       </div>
-      <span class="emoji-mark" aria-hidden="true"></span>
       <p class="day-plan"></p>
       <button class="edit-btn" type="button" aria-label="Редактировать"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 1.5l2.5 2.5L4.5 12H2v-2.5z"/><path d="M8.5 3l2.5 2.5"/></svg></button>
       <div class="tools"><button class="round" type="button" data-tool="up" aria-label="Выше"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12V2M2.5 6.5L7 2l4.5 4.5"/></svg></button><button class="round" type="button" data-tool="down" aria-label="Ниже"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v10M2.5 7.5L7 12l4.5-4.5"/></svg></button></div>
@@ -477,6 +486,11 @@
       <button class="edit-btn" type="button" aria-label="Редактировать"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 1.5l2.5 2.5L4.5 12H2v-2.5z"/><path d="M8.5 3l2.5 2.5"/></svg></button>
       <div class="tools"><button class="round" type="button" data-tool="up" aria-label="Выше"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12V2M2.5 6.5L7 2l4.5 4.5"/></svg></button><button class="round" type="button" data-tool="down" aria-label="Ниже"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v10M2.5 7.5L7 12l4.5-4.5"/></svg></button></div>
     </section>
+  </div>
+
+  <div class="dlg-wrap" id="dlgWrap" role="dialog" aria-modal="true">
+    <div class="dlg-dim" id="dlgDim"></div>
+    <div class="dlg" id="dlg"><p class="h1" id="dlgTitle"></p><p class="hint" id="dlgText"></p><div class="dlg-actions" id="dlgActions"></div></div>
   </div>
 
   <!-- ===== Шторки ===== -->
@@ -549,7 +563,6 @@
         <div class="field"><label for="dDate">Дата</label><input id="dDate" class="datepick" type="text" placeholder="дд.мм.гггг" autocomplete="off"></div>
         <div class="field"><label for="dArea">Где мы</label><input id="dArea" placeholder="Петроградская сторона"></div>
         <div class="field"><label for="dPlan">Планы на день</label><textarea id="dPlan" class="grow" rows="2" placeholder="Утро в Петропавловке, к вечеру — набережная"></textarea></div>
-        <div class="field"><label>Иконка</label><div class="emoji-row" id="emojiRowDay"></div></div>
         <div class="field"><label>Цвет карточки</label><div class="swatches" id="swatchesDay"></div></div>
         <button class="primary" data-add="day" type="button">Добавить день</button>
         <button class="btn-soft red del-card hidden" type="button"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 3.5h10M5 3.5V2h4v1.5M3.5 3.5l.7 8.5h5.6l.7-8.5"/></svg>Удалить карточку</button>
@@ -603,7 +616,7 @@
   const spring = { type: "spring", stiffness: 300, damping: 26 }, soft = { type: "spring", stiffness: 220, damping: 24 }, menuSpring = { type: "spring", stiffness: 170, damping: 20 };
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const $ = (id) => document.getElementById(id);
-  const BUILD = "v31";
+  const BUILD = "v32";
   // запрет масштабирования жестами (iOS игнорирует user-scalable)
   document.addEventListener("gesturestart", (e) => e.preventDefault(), { passive: false });
   document.addEventListener("touchmove", (e) => { if (e.scale && e.scale !== 1) e.preventDefault(); }, { passive: false });
@@ -694,10 +707,10 @@
   const EMOJI = "🗼 🏛️ ⛪ 🕌 🏰 🏯 🗿 🗽 ⛩️ 🌉 🏙️ 🌇 🗺️ 🧭 🏟️ 🌳 🌸 🏞️ 🏔️ 🌋 🏝️ 🏖️ 🌊 🏕️ 🌅 🖼️ 🎭 🎶 🎬 📚 🎡 🎟️ 🔭 🎨 💃 🍽️ ☕ 🍷 🍰 🛍️ 🚶 🚲 ⛵ 🚂 📸 🎪 🌷 🦆".split(" ");
   const emojiHTML = EMOJI.map((e, i) => `<button type="button" class="emoji" aria-pressed="${i === 0}">${e}</button>`).join("");
   const swatchHTML = THEMES.map((th, i) => `<button type="button" class="swatch" data-theme="${i}" style="background:${th.bg}" aria-pressed="${i === 0}" aria-label="Цвет ${i + 1}"></button>`).join("");
-  ["emojiRow", "emojiRowDay", "emojiRowNote"].forEach(id => $(id).innerHTML = emojiHTML);
+  ["emojiRow", "emojiRowNote"].forEach(id => $(id).innerHTML = emojiHTML);
   ["swatches", "swatchesDay", "swatchesNote"].forEach(id => $(id).innerHTML = swatchHTML);
   const pressGroup = (root, sel) => root.addEventListener("click", (e) => { const b = e.target.closest(sel); if (!b) return; root.querySelectorAll(sel).forEach(x => x.setAttribute("aria-pressed", x === b)); animate(b, { scale: [1, 1.12, 1] }, { duration: 0.25 }); });
-  ["emojiRow", "emojiRowDay", "emojiRowNote"].forEach(id => pressGroup($(id), ".emoji")); ["swatches", "swatchesDay", "swatchesNote"].forEach(id => pressGroup($(id), ".swatch"));
+  ["emojiRow", "emojiRowNote"].forEach(id => pressGroup($(id), ".emoji")); ["swatches", "swatchesDay", "swatchesNote"].forEach(id => pressGroup($(id), ".swatch"));
 
   /* ---- форматирование ---- */
   const fmtTime = (v, tz) => { if (!v) return "—"; const o = { hour: "numeric", minute: "2-digit", hour12: true }; if (tz) o.timeZone = tz; return new Intl.DateTimeFormat("en-US", o).format(new Date(v)).replace(/\s/g, " "); };
@@ -730,6 +743,23 @@
     animate(s, { opacity: 0, y: -3 }, { duration: 0.2 }).finished.then(() => { s.textContent = next; animate(s, { opacity: 1, y: [3, 0] }, { duration: 0.3 }); });
   }), 30e3);
 
+  /* ---- диалог: ask({ title, text, actions: [{label, kind: "red"|"accent"|"soft", value}] }) → Promise(value|null) ---- */
+  function ask({ title, text = "", actions = [] }) {
+    return new Promise((res) => {
+      const wrap = $("dlgWrap"), box = $("dlg"), acts = $("dlgActions");
+      $("dlgTitle").textContent = title; $("dlgText").textContent = text; $("dlgText").classList.toggle("hidden", !text);
+      acts.innerHTML = "";
+      const done = async (v) => { await Promise.all([animate(box, { opacity: 0, scale: 0.96 }, { duration: 0.18 }).finished, animate($("dlgDim"), { opacity: 0 }, { duration: 0.22 }).finished]); wrap.style.display = "none"; res(v); };
+      actions.forEach(a => { const b = document.createElement("button"); b.type = "button"; b.className = a.kind === "soft" ? "btn-soft" : "primary " + (a.kind || ""); b.textContent = a.label; b.addEventListener("click", () => done(a.value)); acts.appendChild(b); });
+      $("dlgDim").onclick = () => done(null);
+      wrap.style.display = "flex";
+      animate($("dlgDim"), { opacity: [0, 1] }, { duration: 0.25 });
+      animate(box, { opacity: [0, 1], scale: [0.94, 1], y: [8, 0] }, { type: "spring", stiffness: 320, damping: 26 });
+    });
+  }
+  const confirmDelete = (title, text) => ask({ title, text, actions: [{ label: "Удалить", kind: "red", value: true }, { label: "Отменить", kind: "soft", value: false }] });
+  const notify = (title, text) => ask({ title, text, actions: [{ label: "Понятно", kind: "soft", value: true }] });
+
   /* =========================================================
      Карточки: сборка из шаблонов
      ========================================================= */
@@ -760,7 +790,7 @@
     const dt = d.date ? new Date(d.date + "T12:00") : null;
     q(el, ".num").textContent = dt ? dt.getDate() : "—"; q(el, ".dow").textContent = dt ? RU_DAYS[dt.getDay()].toUpperCase() : "";
     q(el, ".area").textContent = d.area || "День"; q(el, ".date").textContent = dt ? `${dt.getDate()} ${RU_MONTHS[dt.getMonth()].toLowerCase()}, ${["воскресенье","понедельник","вторник","среда","четверг","пятница","суббота"][dt.getDay()]}` : "";
-    q(el, ".day-plan").textContent = d.plan || ""; q(el, ".emoji-mark").textContent = d.emoji || "";
+    q(el, ".day-plan").textContent = d.plan || "";
   }
   const renderNoteBody = (text) => {
     const lines = String(text || "").split(/\r?\n/); let html = "", list = [];
@@ -782,6 +812,12 @@
     return el;
   }
   function refillCard(el) { FILL[el._card.type](el, el._card.data); }
+  // удаление: карточка сжимается, чуть наклоняется и тает, затем схлопывается высота — соседи мягко подъезжают
+  async function collapseAway(el) {
+    el.style.transformOrigin = "50% 50%"; el.style.overflow = "hidden";
+    await animate(el, { opacity: [1, 0], scale: [1, 0.9], rotate: [0, -1.5], y: [0, 6] }, { duration: 0.3, ease: [0.4, 0, 1, 1] }).finished;
+    await animate(el, { height: 0, marginBottom: 0, paddingTop: 0, paddingBottom: 0 }, { duration: 0.3, ease: [0.22, 1, 0.36, 1] }).finished;
+  }
 
   // общие действия на карточках (делегирование)
   document.addEventListener("click", async (e) => {
@@ -863,8 +899,8 @@
   $("archiveList").addEventListener("click", (e) => { const card = e.target.closest(".trip"); if (card && e.target.closest(".share")) { setTab("main", true); openTrip(card._trip, card); } });
   async function tripTool(card, tool) {
     const t = card._trip, i = state.trips.indexOf(t);
-    if (tool === "del") { if (!confirm(`Удалить поездку «${t.title}» со всеми карточками?`)) return;
-      await animate(card, { opacity: 0, scale: 0.96, height: 0, marginBottom: 0 }, { duration: 0.35 }).finished; state.trips.splice(i, 1); save(); renderHome(); return; }
+    if (tool === "del") { if (!await confirmDelete("Удалить поездку?", `«${t.title}» исчезнет вместе со всеми карточками.`)) return;
+      await collapseAway(card); state.trips.splice(i, 1); save(); renderHome(); return; }
     if (tool === "edit") { openTripSheet(t); return; }
     if (tool === "preview") { openPrevSheet(t); return; }
   }
@@ -1035,7 +1071,7 @@
   const sheet = $("sheet");
   let curType = "flight", curMode = "link", editTarget = null, sheetTarget = "trip", pickedPhoto = "";
   // высота блока иконок — ровно четыре ряда
-  const fitEmojiRows = () => ["emojiRow", "emojiRowDay", "emojiRowNote"].forEach(id => { const row = $(id), first = row.firstElementChild; if (!first) return; const cell = first.getBoundingClientRect().width || 50; row.style.maxHeight = (cell * 4 + 8 * 3 + 4) + "px"; });
+  const fitEmojiRows = () => ["emojiRow", "emojiRowNote"].forEach(id => { const row = $(id), first = row.firstElementChild; if (!first) return; const cell = first.getBoundingClientRect().width || 50; row.style.maxHeight = (cell * 4 + 8 * 3 + 4) + "px"; });
   const setType = (t) => { curType = t; $("typeSeg").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x.dataset.type === t)); };
   const setMode = (m) => { curMode = m; $("modeSeg").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x.dataset.mode === m)); };
   const formFor = () => curType === "flight" ? ((curMode === "manual" || editTarget) ? "formFlight" : "formLink") : { stay: "formStay", place: "formPlace", day: "formDay", note: "formNote" }[curType];
@@ -1082,13 +1118,13 @@
   const autoGrow = (ta) => { ta.style.height = "auto"; ta.style.height = Math.max(60, ta.scrollHeight + 2) + "px"; };
   document.querySelectorAll("textarea.grow").forEach(ta => ta.addEventListener("input", () => autoGrow(ta)));
   const pick = (rootId, sel, pred) => $(rootId).querySelectorAll(sel).forEach((x, i) => x.setAttribute("aria-pressed", pred(x, i)));
-  function clearForms() { sheet.querySelectorAll("input, textarea").forEach(i => { i.value = ""; }); ["emojiRowDay", "emojiRowNote"].forEach(id => pick(id, ".emoji", (x, i) => i === 0)); ["swatchesDay", "swatchesNote"].forEach(id => pick(id, ".swatch", (x, i) => i === 0)); sheet.querySelectorAll("textarea.grow").forEach(autoGrow); pickedPhoto = ""; $("sPhotoPrev").style.backgroundImage = ""; pick("emojiRow", ".emoji", (x, i) => i === 0); pick("swatches", ".swatch", (x, i) => i === 0); }
+  function clearForms() { sheet.querySelectorAll("input, textarea").forEach(i => { i.value = ""; }); pick("emojiRowNote", ".emoji", (x, i) => i === 0); ["swatchesDay", "swatchesNote"].forEach(id => pick(id, ".swatch", (x, i) => i === 0)); sheet.querySelectorAll("textarea.grow").forEach(autoGrow); pickedPhoto = ""; $("sPhotoPrev").style.backgroundImage = ""; pick("emojiRow", ".emoji", (x, i) => i === 0); pick("swatches", ".swatch", (x, i) => i === 0); }
   function prefill(el) {
     const d = el._card.data, t = el._card.type;
     if (t === "flight") { setVal("fFromCode", d.fromCode); setVal("fToCode", d.toCode); setVal("fFromCity", d.fromCity); setVal("fToCity", d.toCity);
       const [dd, dt] = splitDT(d.dep), [ad, at] = splitDT(d.arr); setVal("fDepD", dd); setVal("fDepT", dt); setVal("fArrD", ad); setVal("fArrT", at); setVal("fNo", d.no); }
     if (t === "stay") { setVal("sName", d.name); const [id, it] = splitDT(d.in), [od, ot] = splitDT(d.out); setVal("sInD", id); setVal("sInT", it); setVal("sOutD", od); setVal("sOutT", ot); setVal("sAddr", d.addr); setVal("sContact", d.contact); pickedPhoto = d.photo || ""; $("sPhotoPrev").style.backgroundImage = pickedPhoto ? `url("${pickedPhoto}")` : ""; }
-    if (t === "day") { setVal("dDate", d.date); setVal("dArea", d.area); setVal("dPlan", d.plan); pick("emojiRowDay", ".emoji", (x) => x.textContent === d.emoji); pick("swatchesDay", ".swatch", (x) => +x.dataset.theme === (d.theme || 0)); }
+    if (t === "day") { setVal("dDate", d.date); setVal("dArea", d.area); setVal("dPlan", d.plan); pick("swatchesDay", ".swatch", (x) => +x.dataset.theme === (d.theme || 0)); }
     if (t === "note") { setVal("nTitle", d.title); setVal("nNote", d.note); setVal("nBody", d.body); pick("emojiRowNote", ".emoji", (x) => x.textContent === d.emoji); pick("swatchesNote", ".swatch", (x) => +x.dataset.theme === (d.theme || 0)); }
     if (t === "place") { setVal("pName", d.name); setVal("pNote", d.note); setVal("pDesc", d.desc); setVal("pTicket", d.ticket); setVal("pWhen", d.when); setVal("pTake", d.take); setVal("pMap", d.map); pick("emojiRow", ".emoji", (x) => x.textContent === d.emoji); pick("swatches", ".swatch", (x) => +x.dataset.theme === (d.theme || 0)); }
   }
@@ -1103,7 +1139,7 @@
   const val = (id) => $(id).value.trim();
   function readForm(type) {
     if (type === "flight") return { fromCode: val("fFromCode"), toCode: val("fToCode"), fromCity: val("fFromCity"), toCity: val("fToCity"), dep: joinDT(dval("fDepD"), val("fDepT")), arr: joinDT(dval("fArrD"), val("fArrT")), no: val("fNo") };
-    if (type === "day") return { date: dval("dDate"), area: val("dArea"), plan: val("dPlan"), emoji: $("emojiRowDay").querySelector('[aria-pressed="true"]')?.textContent || "📅", theme: +($("swatchesDay").querySelector('[aria-pressed="true"]')?.dataset.theme || 0) };
+    if (type === "day") return { date: dval("dDate"), area: val("dArea"), plan: val("dPlan"), theme: +($("swatchesDay").querySelector('[aria-pressed="true"]')?.dataset.theme || 0) };
     if (type === "note") return { title: val("nTitle"), note: val("nNote"), body: $("nBody").value.trim(), emoji: $("emojiRowNote").querySelector('[aria-pressed="true"]')?.textContent || "📝", theme: +($("swatchesNote").querySelector('[aria-pressed="true"]')?.dataset.theme || 0) };
     if (type === "stay") return { name: val("sName"), in: joinDT(dval("sInD"), val("sInT")), out: joinDT(dval("sOutD"), val("sOutT")), addr: val("sAddr"), contact: val("sContact"), photo: pickedPhoto };
     return { name: val("pName"), note: val("pNote"), desc: val("pDesc"), ticket: val("pTicket"), when: val("pWhen"), take: val("pTake"), map: val("pMap"),
@@ -1112,9 +1148,9 @@
   sheet.addEventListener("click", async (e) => {
     if (e.target.closest(".del-card") && editTarget) {
       const el = editTarget;
-      if (!confirm("Удалить эту карточку?")) return;
       await hideSheet();
-      await animate(el, { opacity: 0, scale: 0.96, height: 0, marginBottom: 0 }, { duration: 0.35 }).finished;
+      if (!await confirmDelete("Удалить карточку?")) return;
+      await collapseAway(el);
       if (el.closest("#favList")) state.favorites = state.favorites.filter(c => c !== el._card);
       else if (cur.trip) { cur.trip.cards = cur.trip.cards.filter(c => c !== el._card); cur.trip.preview = cur.trip.preview.filter(id => id !== el._card.id); }
       el.remove(); save(); if (!cur.trip || !cardList.children.length && screen === "trip") { if (cur.trip) { $("cardsEmpty").classList.remove("hidden"); fadeIn("#cardsEmpty"); fabVisible(fab, false); } }
@@ -1199,9 +1235,9 @@
     if (e.target.closest(".edit-btn")) { openSheet({ edit: el }); return; }
     if (e.target.closest(".fav-move")) {
       const upcoming = state.trips.filter(t => !isPast(t));
-      if (!upcoming.length) { alert("Сначала создай поездку — на вкладке «Поездки», через «+»."); return; }
+      if (!upcoming.length) { notify("Пока нет поездок", "Создай поездку на вкладке «Поездки» через «+», потом перенеси место."); return; }
       let trip = upcoming[0];
-      if (upcoming.length > 1) { const pickIdx = prompt("В какую поездку?\n" + upcoming.map((t, i) => `${i + 1}. ${t.title}`).join("\n"), "1"); const n = parseInt(pickIdx, 10); if (!n || !upcoming[n - 1]) return; trip = upcoming[n - 1]; }
+      if (upcoming.length > 1) { trip = await ask({ title: "В какую поездку?", actions: [...upcoming.map(t => ({ label: t.title, kind: "soft", value: t })), { label: "Отменить", kind: "soft", value: null }] }); if (!trip) return; }
       trip.cards.push({ id: uid(), type: "place", data: { ...el._card.data } });
       await animate(el, { x: [0, 40], opacity: [1, 0] }, { duration: 0.35, ease: [0.4, 0, 1, 1] }).finished;
       state.favorites = state.favorites.filter(c => c !== el._card); save(); renderFav(); renderHome();
@@ -1218,7 +1254,7 @@
     $("statStorage").textContent = `${fmtBytes(used)} из ${fmtBytes(quota)}`; $("storageBar").style.width = Math.max(0.5, Math.min(100, used / quota * 100)).toFixed(1) + "%";
     $("storageHint").textContent = `Данные приложения занимают ${fmtBytes(dataSize)}; остальное — кэш офлайн-версии. Хранится в IndexedDB этого браузера, лимит выделяет само устройство.`;
   }
-  $("wipe").addEventListener("click", async () => { if (!confirm("Удалить все поездки, карточки и избранное с этого устройства?")) return; clearTimeout(saveTimer); try { await idb.clear(); } catch {} localStorage.removeItem(LS_KEY); location.reload(); });
+  $("wipe").addEventListener("click", async () => { if (!await confirmDelete("Очистить все данные?", "Все поездки, карточки и избранное на этом устройстве будут удалены.")) return; clearTimeout(saveTimer); try { await idb.clear(); } catch {} localStorage.removeItem(LS_KEY); location.reload(); });
   // выгрузка и загрузка данных — для переноса на другое устройство
   $("exportBtn").addEventListener("click", () => {
     const blob = new Blob([JSON.stringify({ ...state, exportedAt: new Date().toISOString() }, null, 2)], { type: "application/json" });
@@ -1231,11 +1267,12 @@
     try {
       const s = JSON.parse(await f.text());
       if (!Array.isArray(s.trips)) throw new Error("bad");
-      const mode = state.trips.length ? confirm("Добавить поездки из файла к текущим? «Отмена» — заменить всё содержимым файла.") : false;
-      if (mode) { const ids = new Set(state.trips.map(t => t.id)); s.trips.forEach(t => { if (!ids.has(t.id)) state.trips.push(t); }); (s.favorites || []).forEach(c => state.favorites.push(c)); }
+      const mode = state.trips.length ? await ask({ title: "Загрузить данные", text: "Добавить поездки из файла к текущим или заменить всё?", actions: [{ label: "Добавить к текущим", kind: "accent", value: "add" }, { label: "Заменить всё", kind: "red", value: "replace" }, { label: "Отменить", kind: "soft", value: null }] }) : "replace";
+      if (mode === null) { $("importFile").value = ""; return; }
+      if (mode === "add") { const ids = new Set(state.trips.map(t => t.id)); s.trips.forEach(t => { if (!ids.has(t.id)) state.trips.push(t); }); (s.favorites || []).forEach(c => state.favorites.push(c)); }
       else state = { trips: s.trips, favorites: s.favorites || [] };
-      save(); renderHome(); renderFav(); alert("Готово — данные загружены.");
-    } catch { alert("Не получилось прочитать файл. Нужен файл, выгруженный из этого приложения."); }
+      save(); renderHome(); renderFav(); notify("Готово", "Данные загружены.");
+    } catch { notify("Не получилось прочитать файл", "Нужен файл, выгруженный из этого приложения."); }
     $("importFile").value = "";
   });
 
