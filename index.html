@@ -6,7 +6,7 @@
 <title>Поездки</title>
 <meta name="theme-color" content="#FFFFFF">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Поездки">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/svg+xml" href="./icons/favicon.svg">
@@ -84,12 +84,14 @@
 
   /* ===== Экран поездки ===== */
   .detail { position: absolute; inset: 0; z-index: 3; display: none; }
-  .detail .bg { position: absolute; inset: 0; background: var(--photo, var(--spb-photo)) center / cover no-repeat, #3A3532; }
-  .detail .bg .shade { position: absolute; inset: 0; background: linear-gradient(180deg, #000 0%, rgba(0,0,0,0) 100%); opacity: 0.5; }
-  .cards { position: absolute; inset: 0; padding: calc(var(--top) + 60px) 20px 24px; }
+  .detail .bg { position: absolute; inset: -12px; background: var(--photo, var(--spb-photo)) center / cover no-repeat, #3A3532; filter: blur(6px); }   /* лёгкое размытие; inset — чтобы не светились края */
+  .detail .bg .shade { position: absolute; inset: 0; background: linear-gradient(180deg, #000 0%, rgba(0,0,0,0.15) 100%); opacity: 0.7; }
+  .cards { position: absolute; inset: 0; padding: calc(var(--top) + 60px) 20px calc(90px + env(safe-area-inset-bottom, 0px)); }
+  .cards-empty { position: absolute; left: 20px; right: 20px; top: 40%; text-align: center; color: rgba(255,255,255,0.85); font-size: 12px; line-height: 1.6; }
+  .cards-empty .add { width: 48px; height: 48px; margin: 0 auto 14px; background: var(--glass); }
   .morph { position: absolute; z-index: 4; overflow: hidden; display: none; background: var(--photo, var(--spb-photo)) center / cover no-repeat, #3A3532; }
   .morph .shade { position: absolute; inset: 0; background: linear-gradient(180deg, #000 0%, rgba(0,0,0,0) 100%); }
-  .fab { position: absolute; right: 20px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); width: 36px; height: 36px; border-radius: 50%; border: 0; z-index: 7;
+  .fab { position: absolute; right: 20px; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); width: 48px; height: 48px; border-radius: 50%; border: 0; z-index: 7;
          background: var(--glass); color: var(--black); display: grid; place-items: center; opacity: 0; pointer-events: none;
          -webkit-backdrop-filter: blur(var(--panel-blur)); backdrop-filter: blur(var(--panel-blur)); }
   .fab.home-fab { bottom: calc(var(--tab-h) + 16px); background: #F5F5F5; }
@@ -160,6 +162,9 @@
   .tools { position: absolute; inset: 0; border-radius: var(--r-panel); background: rgba(0,0,0,0.4); display: none; align-items: center; justify-content: center; gap: 12px; z-index: 5; }
   .tools .round.del { color: #B43831; }
   .editing .cards .tools { display: flex; }
+  .editing .detail .bg .shade { opacity: 0.92; }
+  .editing .cards .card > *:not(.tools) { opacity: 0.45; }
+  .editing .cards .tools { background: rgba(0,0,0,0.2); }
 
   /* ===== Нижнее меню ===== */
   .tabbar { position: absolute; left: 0; right: 0; bottom: 0; height: var(--tab-h); padding-bottom: calc(4px + env(safe-area-inset-bottom, 0px)); z-index: 9; display: flex; background: rgba(255,255,255,0.92); border-top: 1px solid var(--panel-border);
@@ -198,8 +203,7 @@
   .field { display: flex; flex-direction: column; gap: 8px; }
   .field label { font-size: 12px; color: var(--black); }   /* подписи полей — чёрные, подсказки внутри — курсивом */
   .field input::placeholder, .field textarea::placeholder { font-style: italic; color: #B0B0B0; }
-  .field input[type="date"], .field input[type="time"] { -webkit-appearance: none; appearance: none; text-align: left; display: flex; align-items: center; min-width: 0; }
-  .field input::-webkit-date-and-time-value { text-align: left; }
+
   .field input, .field textarea { font-family: var(--font); font-size: 12px; font-weight: 500; color: var(--black); height: 40px; border: 1px solid var(--panel-border); border-radius: 10px; padding: 0 12px; background: var(--white); outline: none; width: 100%; }
   .field textarea { height: 96px; padding: 12px; resize: none; line-height: 1.5; }
   .field textarea.grow { height: auto; min-height: 60px; overflow: hidden; }   /* растёт вместе с текстом */
@@ -224,15 +228,7 @@
   .photo-btn { display: grid; place-items: center; cursor: pointer; flex: 1; }
   .check { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--panel-border); font-size: 12px; }
   .check input { width: 18px; height: 18px; accent-color: var(--accent); }
-  /* компактный календарь вместо системного */
-  .dp { margin-top: 8px; border: 1px solid var(--panel-border); border-radius: 12px; padding: 10px; background: var(--white); }
-  .dp-head { display: flex; align-items: center; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 8px; }
-  .dp-head button { width: 28px; height: 28px; border: 0; border-radius: 50%; background: #F5F5F5; display: grid; place-items: center; }
-  .dp-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
-  .dp-grid .dow { font-size: 10px; color: var(--label); text-align: center; height: 18px; line-height: 18px; }
-  .dp-grid button { height: 30px; border: 0; border-radius: 8px; background: none; font-size: 12px; font-weight: 500; }
-  .dp-grid button.other { color: #C8C8C8; } .dp-grid button.sel { background: var(--accent); color: var(--white); } .dp-grid button.today { box-shadow: inset 0 0 0 1px var(--panel-border); }
-  .field input.datepick { cursor: pointer; }
+
 
   /* ===== Скелет загрузки ===== */
   .skeleton { position: absolute; inset: 0; padding: var(--top) 20px 20px; background: var(--white); z-index: 30; }
@@ -275,21 +271,23 @@
     <div class="detail" id="detail">
       <div class="bg" id="detailBg"><div class="shade"></div></div>
       <div class="cards scroll" id="cards">
-        <button class="add" id="detailAdd" type="button" aria-label="Добавить карточку">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M7 0.75v12.5M0.75 7h12.5"/></svg>
-        </button>
-        <div class="ghost" aria-hidden="true"></div>
         <div id="cardList"></div>
+        <div class="cards-empty hidden" id="cardsEmpty">
+          <button class="add big" id="detailAdd" type="button" aria-label="Добавить первую карточку">
+            <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M7 0.75v12.5M0.75 7h12.5"/></svg>
+          </button>
+          <p>Добавьте первую карточку путешествия</p>
+        </div>
       </div>
       <div class="hdr-bg" id="hdrBg" aria-hidden="true"></div>
       <button class="fab" id="fab" type="button" aria-label="Добавить карточку">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M7 0.75v12.5M0.75 7h12.5"/></svg>
+        <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M7 0.75v12.5M0.75 7h12.5"/></svg>
       </button>
     </div>
     <div class="morph" id="morph" aria-hidden="true"><div class="shade" id="morphShade"></div></div>
     <div class="hdr-bg light" id="hdrBgHome" aria-hidden="true"></div>
     <button class="fab home-fab" id="homeFab" type="button" aria-label="Добавить поездку">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M7 0.75v12.5M0.75 7h12.5"/></svg>
+      <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M7 0.75v12.5M0.75 7h12.5"/></svg>
     </button>
 
     <!-- шапка -->
@@ -447,16 +445,16 @@
           <div class="field"><label for="fFromCity">Город вылета</label><input id="fFromCity" placeholder="Bremen"></div>
           <div class="field"><label for="fToCity">Город прилёта</label><input id="fToCity" placeholder="Pulkovo"></div>
         </div>
-        <div class="grid2"><div class="field"><label for="fDepD">Вылет, дата</label><input id="fDepD" class="datepick" type="text" readonly placeholder="дд.мм.гггг" inputmode="none"></div><div class="field"><label for="fDepT">Время</label><input id="fDepT" type="time"></div></div>
-        <div class="grid2"><div class="field"><label for="fArrD">Прилёт, дата</label><input id="fArrD" class="datepick" type="text" readonly placeholder="дд.мм.гггг" inputmode="none"></div><div class="field"><label for="fArrT">Время</label><input id="fArrT" type="time"></div></div>
+        <div class="grid2"><div class="field"><label for="fDepD">Вылет, дата</label><input id="fDepD" class="datepick" type="text" placeholder="дд.мм.гггг" inputmode="numeric" autocomplete="off"></div><div class="field"><label for="fDepT">Время</label><input id="fDepT" class="timepick" type="text" placeholder="чч:мм" inputmode="numeric" autocomplete="off"></div></div>
+        <div class="grid2"><div class="field"><label for="fArrD">Прилёт, дата</label><input id="fArrD" class="datepick" type="text" placeholder="дд.мм.гггг" inputmode="numeric" autocomplete="off"></div><div class="field"><label for="fArrT">Время</label><input id="fArrT" class="timepick" type="text" placeholder="чч:мм" inputmode="numeric" autocomplete="off"></div></div>
         <div class="field"><label for="fNo">Номер рейса</label><input id="fNo" placeholder="AG 6749"></div>
         <button class="primary" data-add="flight" type="button">Добавить перелёт</button>
         <button class="btn-soft red del-card hidden" type="button"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 3.5h10M5 3.5V2h4v1.5M3.5 3.5l.7 8.5h5.6l.7-8.5"/></svg>Удалить карточку</button>
       </div>
       <div class="form hidden" id="formStay">
         <div class="field"><label for="sName">Район или название</label><input id="sName" placeholder="Петроградская сторона"></div>
-        <div class="grid2"><div class="field"><label for="sInD">Заезд, дата</label><input id="sInD" class="datepick" type="text" readonly placeholder="дд.мм.гггг" inputmode="none"></div><div class="field"><label for="sInT">Время</label><input id="sInT" type="time"></div></div>
-        <div class="grid2"><div class="field"><label for="sOutD">Выезд, дата</label><input id="sOutD" class="datepick" type="text" readonly placeholder="дд.мм.гггг" inputmode="none"></div><div class="field"><label for="sOutT">Время</label><input id="sOutT" type="time"></div></div>
+        <div class="grid2"><div class="field"><label for="sInD">Заезд, дата</label><input id="sInD" class="datepick" type="text" placeholder="дд.мм.гггг" inputmode="numeric" autocomplete="off"></div><div class="field"><label for="sInT">Время</label><input id="sInT" class="timepick" type="text" placeholder="чч:мм" inputmode="numeric" autocomplete="off"></div></div>
+        <div class="grid2"><div class="field"><label for="sOutD">Выезд, дата</label><input id="sOutD" class="datepick" type="text" placeholder="дд.мм.гггг" inputmode="numeric" autocomplete="off"></div><div class="field"><label for="sOutT">Время</label><input id="sOutT" class="timepick" type="text" placeholder="чч:мм" inputmode="numeric" autocomplete="off"></div></div>
         <div class="field"><label for="sAddr">Адрес</label><input id="sAddr" placeholder="Улица, дом, квартира"></div>
         <div class="field"><label for="sContact">Контакт хозяина или ссылка на Airbnb</label><input id="sContact" placeholder="+7… или https://airbnb.com/…"></div>
         <div class="field"><label>Фото</label><div class="photo-pick"><div class="photo-prev" id="sPhotoPrev"></div><label class="secondary photo-btn" for="sPhoto">Выбрать картинку</label><input id="sPhoto" type="file" accept="image/*" class="hidden"></div></div>
@@ -489,8 +487,8 @@
     <div class="sheet-body">
       <div class="form" style="margin-top:0">
         <div class="field"><label for="tTitle">Куда летим</label><input id="tTitle" placeholder="Санкт - Петербург"></div>
-        <div class="field"><label for="tStart">Начало</label><input id="tStart" class="datepick" type="text" readonly placeholder="дд.мм.гггг" inputmode="none"></div>
-        <div class="field"><label for="tEnd">Конец</label><input id="tEnd" class="datepick" type="text" readonly placeholder="дд.мм.гггг" inputmode="none"></div>
+        <div class="field"><label for="tStart">Начало</label><input id="tStart" class="datepick" type="text" placeholder="дд.мм.гггг" inputmode="numeric" autocomplete="off"></div>
+        <div class="field"><label for="tEnd">Конец</label><input id="tEnd" class="datepick" type="text" placeholder="дд.мм.гггг" inputmode="numeric" autocomplete="off"></div>
         <div class="field"><label>Фоновая картинка</label><div class="photo-pick"><div class="photo-prev wide" id="tPhotoPrev"></div><label class="secondary photo-btn" for="tPhoto">Выбрать картинку</label><input id="tPhoto" type="file" accept="image/*" class="hidden"></div></div>
         <button class="primary" id="tripSave" type="button">Создать поездку</button>
       </div>
@@ -613,7 +611,7 @@
   const fmtDay = (v) => { if (!v) return "—"; const d = new Date(v); return `${d.getDate()} ${RU_MONTHS[d.getMonth()]}`; };
   const fmtDow = (v) => { if (!v) return ""; const d = new Date(v); return `${RU_DAYS[d.getDay()]}, ${p2(d.getHours())}:${p2(d.getMinutes())}`; };
   const splitDT = (v) => { const s = toLocalInput(v); return s ? [s.slice(0, 10), s.slice(11, 16)] : ["", ""]; };
-  const joinDT = (d, tm) => d ? `${d}T${tm || "00:00"}` : "";
+  const joinDT = (d, tm) => d ? `${d}T${parseTime(tm) || "00:00"}` : "";
   const toLocalInput = (v) => { if (!v) return ""; const d = new Date(v); return `${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())}T${p2(d.getHours())}:${p2(d.getMinutes())}`; };
   const fmtRange = (a, b) => { const f = (s) => { if (!s) return ""; const d = new Date(s + "T12:00"); return `${d.getDate()}.${d.getMonth() + 1}`; }; return [f(a), f(b)].filter(Boolean).join(" - "); };
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -752,6 +750,7 @@
     detail.style.setProperty("--photo", `url("${trip.photo || SPB_PHOTO}")`);
     $("titleTrip").textContent = trip.title;
     cardList.innerHTML = ""; trip.cards.forEach(c => cardList.appendChild(buildCard(c)));
+    $("cardsEmpty").classList.toggle("hidden", !!trip.cards.length);
   }
   async function openTrip(trip, card) {
     if (transitioning || screen !== "main") return; transitioning = true; cur.trip = trip;
@@ -768,14 +767,15 @@
     animate("#titleMain", { opacity: 0 }, { duration: d * 0.4 });
     animate("#titles", { x: 0 }, { duration: d, ease });
     animate(tabbar, { y: tabbar.offsetHeight + 16 }, { duration: d, ease });
-    animate(morphShade, { opacity: 0.5 }, { duration: d, ease });
+    animate(morphShade, { opacity: 0.7 }, { duration: d, ease });
     await animate(morph, { left: 0, top: 0, width: phone.clientWidth, height: phone.clientHeight, borderRadius: 0 }, { duration: d, ease }).finished;
-    cards.querySelectorAll(":scope > *").forEach(el => el.style.opacity = 0);
+    cards.querySelectorAll("#cardList > .card, .cards-empty").forEach(el => el.style.opacity = 0);
     detail.style.display = "block"; cards.scrollTop = 0;
     void detail.offsetHeight; morph.style.display = "none";
     for (const b of [backBtn, $("editTrip")]) { b.style.opacity = 0; b.classList.remove("off"); }
     fadeIn([backBtn, $("editTrip"), $("titleTrip")], { duration: 0.45 });
-    fadeIn(".cards > *", { duration: 0.6, delay: stagger(0.07) }, { y: 12 });
+    fadeIn(".cards #cardList > .card, .cards-empty:not(.hidden)", { duration: 0.6, delay: stagger(0.07) }, { y: 12 });
+    if (cur.trip.cards.length) fabVisible(fab, true);
     screen = "trip"; transitioning = false;
   }
   async function closeTrip() {
@@ -786,8 +786,8 @@
     const card = [...tripList.children].find(c => c._trip === cur.trip);
     const r1 = card ? relRect(card) : { left: 20, top: 145, width: phone.clientWidth - 40, height: 140 };
     Object.assign(morph.style, { display: "block", left: "0px", top: "0px", width: phone.clientWidth + "px", height: phone.clientHeight + "px", borderRadius: "0px" });
-    morphShade.style.opacity = 0.5;
-    await animate(".cards > *", { opacity: 0, y: 8 }, { duration: 0.28, ease: [0.4, 0, 1, 1] }).finished;
+    morphShade.style.opacity = 0.7;
+    await animate("#cardList > .card, .cards-empty", { opacity: 0, y: 8 }, { duration: 0.28, ease: [0.4, 0, 1, 1] }).finished;
     detail.style.display = "none";
     animate([backBtn, $("editTrip"), $("titleTrip")], { opacity: 0 }, { duration: 0.25 }).finished.then(() => [backBtn, $("editTrip")].forEach(b => b.classList.add("off")));
     phone.classList.remove("is-trip");
@@ -845,15 +845,13 @@
   const fab = $("fab"), homeFab = $("homeFab");
   // подложка под шапкой появляется только когда контент доезжает до неё (плюс начинается через 24px после шапки)
   const hdrOpacity = (st) => Math.max(0, Math.min(1, (st - 20) / 30));
-  cards.addEventListener("scroll", () => { fabVisible(fab, cards.scrollTop > 101); $("hdrBg").style.opacity = hdrOpacity(cards.scrollTop); }, { passive: true });
+  cards.addEventListener("scroll", () => { $("hdrBg").style.opacity = hdrOpacity(cards.scrollTop); }, { passive: true });
   home.addEventListener("scroll", () => { fabVisible(homeFab, home.scrollTop > 101); $("hdrBgHome").style.opacity = hdrOpacity(home.scrollTop); }, { passive: true });
   fab.addEventListener("click", () => openSheet()); $("detailAdd").addEventListener("click", () => openSheet());
   homeFab.addEventListener("click", () => openTripSheet()); $("homeAdd").addEventListener("click", () => openTripSheet());
   hover($("homeAdd"), () => { animate($("homeGhost"), { y: -6 }, soft); return () => animate($("homeGhost"), { y: 0 }, soft); });
-  const detailGhost = detail.querySelector(".ghost");
-  hover($("detailAdd"), () => { animate(detailGhost, { y: -6 }, soft); return () => animate(detailGhost, { y: 0 }, soft); });
   const liftGhost = (g) => animate(g, { y: [0, -10, 0] }, { duration: 0.5, ease: "easeInOut" });   // «плашка вздрагивает» при нажатии на плюс
-  $("detailAdd").addEventListener("click", () => liftGhost(detailGhost)); $("homeAdd").addEventListener("click", () => liftGhost($("homeGhost")));
+  $("homeAdd").addEventListener("click", () => liftGhost($("homeGhost")));
 
   /* =========================================================
      Шторки
@@ -872,7 +870,7 @@
     return true;
   }
   async function hideSheet() {
-    const el = openedSheet; if (!el) return; openedSheet = null; closeDp();
+    const el = openedSheet; if (!el) return; openedSheet = null;
     animate(dim, { opacity: 0 }, { duration: 0.25 }).finished.then(() => { if (!openedSheet) dim.style.display = "none"; });
     await animate(el, { y: el.offsetHeight + 20 }, { duration: 0.38, ease: [0.4, 0, 0.6, 1] }).finished;
     el.style.display = "none"; heightAnim?.stop(); heightAnim = null; el.style.height = ""; el.style.overflow = "";
@@ -906,47 +904,17 @@
   sheet.querySelectorAll("button[data-add]").forEach(b => b.dataset.label = b.textContent);
   $("typeSeg").addEventListener("click", (e) => { const b = e.target.closest("[data-type]"); if (b) { setType(b.dataset.type); showForm(); requestAnimationFrame(fitEmojiRows); } });
   $("modeSeg").addEventListener("click", (e) => { const b = e.target.closest("[data-mode]"); if (b) { setMode(b.dataset.mode); showForm(); } });
-  /* ---- компактный календарь: input.datepick хранит ISO в dataset.value, показывает дд.мм.гггг ---- */
-  const MONTHS_RU = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
+  /* ---- даты и время вводятся с клавиатуры: дд.мм.гггг и чч:мм ---- */
   const fmtRu = (iso) => iso ? iso.slice(8, 10) + "." + iso.slice(5, 7) + "." + iso.slice(0, 4) : "";
-  const isoOf = (y, m, d) => `${y}-${p2(m + 1)}-${p2(d)}`;
-  const dval = (id) => $(id).dataset.value || "";
-  const setDate = (input, iso) => { input.dataset.value = iso || ""; input.value = fmtRu(iso); };
-  let dpOpen = null;
-  function closeDp() { dpOpen?.remove(); dpOpen = null; }
-  function openDp(input) {
-    closeDp();
-    const today = new Date(); let cur = input.dataset.value ? new Date(input.dataset.value + "T12:00") : today;
-    let y = cur.getFullYear(), m = cur.getMonth();
-    const box = document.createElement("div"); box.className = "dp";
-    const render = () => {
-      const first = new Date(y, m, 1), start = (first.getDay() + 6) % 7, days = new Date(y, m + 1, 0).getDate(), prevDays = new Date(y, m, 0).getDate();
-      let cells = "";
-      for (let i = 0; i < 42; i++) {
-        const n = i - start + 1; let dy = y, dm = m, dd = n, other = false;
-        if (n < 1) { dd = prevDays + n; dm = m - 1; other = true; } else if (n > days) { dd = n - days; dm = m + 1; other = true; }
-        const dt = new Date(dy, dm, dd), iso = isoOf(dt.getFullYear(), dt.getMonth(), dt.getDate());
-        const cls = [other ? "other" : "", iso === input.dataset.value ? "sel" : "", iso === isoOf(today.getFullYear(), today.getMonth(), today.getDate()) ? "today" : ""].join(" ");
-        cells += `<button type="button" class="${cls}" data-iso="${iso}">${dd}</button>`;
-        if (i === 34 && n + 7 > days) break;
-      }
-      box.innerHTML = `<div class="dp-head"><button type="button" data-nav="-1" aria-label="Предыдущий месяц">‹</button><span>${MONTHS_RU[m]} ${y}</span><button type="button" data-nav="1" aria-label="Следующий месяц">›</button></div>
-        <div class="dp-grid">${["Пн","Вт","Ср","Чт","Пт","Сб","Вс"].map(d => `<span class="dow">${d}</span>`).join("")}${cells}</div>`;
-    };
-    render();
-    box.addEventListener("click", (e) => {
-      const nav = e.target.closest("[data-nav]"); if (nav) { m += +nav.dataset.nav; if (m < 0) { m = 11; y--; } if (m > 11) { m = 0; y++; } render(); return; }
-      const d = e.target.closest("[data-iso]"); if (d) { setDate(input, d.dataset.iso); closeDp(); input.dispatchEvent(new Event("change")); }
-    });
-    input.closest(".field").appendChild(box); dpOpen = box;
-    animate(box, { opacity: [0, 1], y: [-4, 0] }, { duration: 0.25 });
-  }
-  document.addEventListener("click", (e) => { const inp = e.target.closest("input.datepick"); if (inp) { if (dpOpen && dpOpen.previousElementSibling === inp) closeDp(); else openDp(inp); } else if (dpOpen && !e.target.closest(".dp")) closeDp(); });
-  const setVal = (id, v) => { const el = $(id); if (el.classList.contains("datepick")) { setDate(el, v || ""); return; } el.value = v ?? ""; if (el.classList.contains("grow")) autoGrow(el); };
+  const parseRuDate = (s) => { s = (s || "").trim(); let m = s.match(/^(\d{1,2})[.\/-](\d{1,2})[.\/-](\d{2,4})$/); if (m) { let y = m[3].length === 2 ? "20" + m[3] : m[3]; return `${y}-${p2(+m[2])}-${p2(+m[1])}`; } m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/); return m ? s : ""; };
+  const parseTime = (s) => { const m = (s || "").trim().match(/^(\d{1,2})[:.](\d{2})$/); return m ? `${p2(+m[1])}:${m[2]}` : ""; };
+  const dval = (id) => parseRuDate($(id).value);
+  const closeDp = () => {};
+  const setVal = (id, v) => { const el = $(id); if (el.classList.contains("datepick")) { el.value = fmtRu(v || ""); return; } el.value = v ?? ""; if (el.classList.contains("grow")) autoGrow(el); };
   const autoGrow = (ta) => { ta.style.height = "auto"; ta.style.height = Math.max(60, ta.scrollHeight + 2) + "px"; };
   document.querySelectorAll("textarea.grow").forEach(ta => ta.addEventListener("input", () => autoGrow(ta)));
   const pick = (rootId, sel, pred) => $(rootId).querySelectorAll(sel).forEach((x, i) => x.setAttribute("aria-pressed", pred(x, i)));
-  function clearForms() { closeDp(); sheet.querySelectorAll("input, textarea").forEach(i => { i.value = ""; delete i.dataset.value; }); sheet.querySelectorAll("textarea.grow").forEach(autoGrow); pickedPhoto = ""; $("sPhotoPrev").style.backgroundImage = ""; pick("emojiRow", ".emoji", (x, i) => i === 0); pick("swatches", ".swatch", (x, i) => i === 0); }
+  function clearForms() { sheet.querySelectorAll("input, textarea").forEach(i => { i.value = ""; }); sheet.querySelectorAll("textarea.grow").forEach(autoGrow); pickedPhoto = ""; $("sPhotoPrev").style.backgroundImage = ""; pick("emojiRow", ".emoji", (x, i) => i === 0); pick("swatches", ".swatch", (x, i) => i === 0); }
   function prefill(el) {
     const d = el._card.data, t = el._card.type;
     if (t === "flight") { setVal("fFromCode", d.fromCode); setVal("fToCode", d.toCode); setVal("fFromCity", d.fromCity); setVal("fToCity", d.toCity);
@@ -977,7 +945,8 @@
       await animate(el, { opacity: 0, scale: 0.96, height: 0, marginBottom: 0 }, { duration: 0.35 }).finished;
       if (el.closest("#favList")) state.favorites = state.favorites.filter(c => c !== el._card);
       else if (cur.trip) { cur.trip.cards = cur.trip.cards.filter(c => c !== el._card); cur.trip.preview = cur.trip.preview.filter(id => id !== el._card.id); }
-      el.remove(); save(); if (el.closest("#favList") || !cur.trip) renderFav(); renderHome();
+      el.remove(); save(); if (!cur.trip || !cardList.children.length && screen === "trip") { if (cur.trip) { $("cardsEmpty").classList.remove("hidden"); fadeIn("#cardsEmpty"); fabVisible(fab, false); } }
+      renderFav(); renderHome();
       return;
     }
     const b = e.target.closest("button[data-add]"); if (!b) return;
@@ -986,6 +955,7 @@
     if (sheetTarget === "fav") { const card = { id: uid(), type: "place", data: d }; state.favorites.push(card); await hideSheet(); renderFav(card.id); save(); return; }
     const card = { id: uid(), type, data: d }; cur.trip.cards.push(card);
     const el = buildCard(card); el.style.opacity = 0; cardList.appendChild(el);
+    $("cardsEmpty").classList.add("hidden"); fabVisible(fab, true);
     await hideSheet(); cards.scrollTo({ top: cards.scrollHeight, behavior: "smooth" });
     fadeIn(el, { duration: 0.5 }, { y: 16 }); save();
   });
@@ -995,7 +965,7 @@
   $("tPhoto").addEventListener("change", async () => { const f = $("tPhoto").files[0]; if (!f) return; tripPhoto = await shrink(f, 2000); $("tPhotoPrev").style.backgroundImage = `url("${tripPhoto}")`; animate("#tPhotoPrev", { scale: [0.9, 1], opacity: [0, 1] }, { duration: 0.3 }); $("tPhoto").value = ""; });
   async function openTripSheet(trip = null) {
     if (openedSheet) return; tripEdit = trip; tripPhoto = trip?.photo || "";
-    closeDp(); setVal("tTitle", trip?.title); setVal("tStart", trip?.start); setVal("tEnd", trip?.end);
+    setVal("tTitle", trip?.title); setVal("tStart", trip?.start); setVal("tEnd", trip?.end);
     $("tPhotoPrev").style.backgroundImage = tripPhoto ? `url("${tripPhoto}")` : "";
     $("tripSheetTitle").textContent = trip ? "Поездка" : "Новая поездка"; $("tripSave").textContent = trip ? "Сохранить" : "Создать поездку";
     await showSheet(tripSheet);
