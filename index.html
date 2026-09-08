@@ -29,7 +29,7 @@
     --label: #9A9A9A; --status: #D2D2D2; --accent: #DE8F5F; --pill-stroke: #56656F;
     --divider: rgba(0,0,0,0.09);
     --panel-dark: rgba(22,22,22,0.92); --panel-light: rgba(255,255,255,0.9); --panel-border: #EDEDED;
-    --panel-blur: 10px; --glass: rgba(255,255,255,0.6);
+    --panel-blur: 28px;   /* Figma background blur 56 ≈ CSS 28px */ --glass: rgba(255,255,255,0.6);
     --act-bg: rgba(74,88,54,0.86); --act-tile: #E6EFD9; --act-note: #E6EFD9;
     --chip-ticket: #E6EFD9; --chip-when: #CEDABA; --chip-take: #9EAD87;
     --r-panel: 16px; --r-photo: 6px; --r-tag: 7px;
@@ -38,20 +38,21 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   :root { --top: calc(10px + env(safe-area-inset-top, 0px)); --safe-b: max(4px, calc(env(safe-area-inset-bottom, 0px) - 16px)); --tab-h: calc(60px + var(--safe-b)); }   /* меню опущено в безопасную зону: от подписей до края ~18px */   /* заголовок — в два раза дальше от края, под системную строку */
-  html, body { height: 100%; overflow: hidden; position: fixed; inset: 0; width: 100%; overscroll-behavior: none; touch-action: pan-y; }
-  body { font-family: var(--font); font-weight: 500; line-height: 1; color: var(--black); background: var(--white);   /* фон страницы белый: даже если высота экрана посчитана неверно, серой полосы не будет */ display: flex; justify-content: center; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: 100%; }
+  html, body { min-height: 100%; width: 100%; overscroll-behavior-y: none; }
+  body { font-family: var(--font); font-weight: 500; line-height: 1; color: var(--black); background: var(--white); -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: 100%; }
   /* основа — на весь экран телефона; на широких экранах ограничена, чтобы не растягиваться на монитор */
-  .phone { position: relative; width: 100%; max-width: 520px; height: 100%; min-height: 100vh; background: var(--white); overflow: hidden; }   /* высота — от body (fixed, inset 0): в standalone-режиме iOS 100dvh не доходит до низа */
-  .scroll { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
-  .content { position: absolute; inset: 0; opacity: 0; }
+  /* страница прокручивается сама, как обычный сайт — так надёжнее всего на телефонах; шапка, меню и фон прибиты к окну */
+  .phone { position: relative; width: 100%; min-height: 100vh; min-height: 100dvh; background: var(--white); }   /* на всю ширину и высоту любого экрана — телефон, планшет, ноутбук */
+
+  .content { position: relative; opacity: 0; }
   .h1 { font-size: 16px; font-weight: 600; } .big { font-size: 20px; font-weight: 600; } .cap { font-size: 12px; font-weight: 500; }
   button { font-family: var(--font); cursor: pointer; color: inherit; }
   button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .hidden { display: none !important; }
-  .scroll { overflow-y: auto; scrollbar-width: none; } .scroll::-webkit-scrollbar { display: none; }
+
 
   /* ===== Шапка ===== */
-  .header { position: absolute; left: 20px; top: var(--top); right: 20px; height: 36px; display: flex; align-items: center; gap: 12px; z-index: 6; }
+  .header { position: fixed; left: 20px; top: var(--top); right: 20px; height: 36px; display: flex; align-items: center; gap: 12px; z-index: 6; }
   .round { width: 36px; height: 36px; border-radius: 50%; border: 0; background: var(--white); color: var(--black); display: grid; place-items: center; flex: none; }
   .round.off { opacity: 0; pointer-events: none; }
   .back { position: relative; z-index: 3; }
@@ -62,13 +63,14 @@
   .hdr-right .off { display: none; }   /* скрытые кнопки не занимают место — видимая стоит вровень с краем карточки */
   .grey { background: #F5F5F5; }
   .round[aria-pressed="true"], .round.grey[aria-pressed="true"] { background: var(--accent); color: var(--white); }
-  .hdr-bg { position: absolute; left: 0; right: 0; top: 0; height: calc(var(--top) + 54px); z-index: 5; opacity: 0; pointer-events: none;
+  .hdr-bg { position: fixed; left: 0; right: 0; top: 0; height: calc(var(--top) + 54px); z-index: 5; opacity: 0; pointer-events: none;
             background: linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.25)); -webkit-backdrop-filter: blur(var(--panel-blur)); backdrop-filter: blur(var(--panel-blur)); }
   #hdrBgHome { height: calc(var(--top) + 44px); }
   .hdr-bg.light { background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.7)); }
 
   /* ===== Главная: список поездок ===== */
-  .home { position: absolute; inset: 0 0 var(--tab-h); padding: calc(var(--top) + 60px) 20px 24px; z-index: 2; }   /* шапка 36 + 24 до плюса */
+  .home { position: relative; padding: calc(var(--top) + 60px) 20px calc(var(--tab-h) + 24px); z-index: 2; }   /* шапка 36 + 24 до плюса */
+  .home.leaving { position: absolute; left: 0; right: 0; top: 0; pointer-events: none; }
   .add { width: 36px; height: 36px; border: 0; border-radius: 50%; background: #F5F5F5; color: var(--black); display: grid; place-items: center; margin: 0 auto 24px;
          -webkit-backdrop-filter: blur(var(--panel-blur)); backdrop-filter: blur(var(--panel-blur)); }
   .add svg { display: block; }
@@ -77,7 +79,7 @@
   .detail .ghost { width: calc(100% - 46px); margin-bottom: -34px; background: var(--glass); -webkit-backdrop-filter: blur(var(--panel-blur)); backdrop-filter: blur(var(--panel-blur)); }
   .trip { position: relative; width: 100%; min-height: 140px; border-radius: var(--r-panel); overflow: hidden; color: var(--white); margin-bottom: 10px; z-index: 1;
           background: var(--photo, var(--spb-photo)) center / cover no-repeat, #3A3532; padding: 32px 10px 10px; }
-  .trip .shade { position: absolute; inset: 0; background: linear-gradient(180deg, #000 0%, rgba(0,0,0,0.15) 100%); opacity: 0.5; pointer-events: none; }
+  .trip .shade { position: absolute; inset: 0; background: linear-gradient(180deg, #000 0%, rgba(0,0,0,0.15) 100%); opacity: 0.7; pointer-events: none; }   /* то же затемнение, что на экране поездки */
   .trip-title { position: relative; text-align: center; padding: 0 56px; }
   .trip-title .h1 { overflow-wrap: anywhere; line-height: 1.2; }
   .trip-title .cap { margin-top: 6px; font-weight: 700; }
@@ -91,18 +93,20 @@
   .home-empty { text-align: center; color: var(--label); font-size: 12px; line-height: 1.6; margin-top: 60px; }
 
   /* ===== Экран поездки ===== */
-  .detail { position: absolute; inset: 0; z-index: 4; display: none; }   /* прозрачный слой карточек поверх фото-морфа */
+  .detail { position: relative; z-index: 4; display: none; min-height: 100vh; min-height: 100dvh; }   /* прозрачный слой карточек поверх фото-морфа */
+  .detail.leaving { position: absolute; left: 0; right: 0; top: 0; pointer-events: none; }
   .detail .bg { display: none; }
   .detail .bg .shade { position: absolute; inset: 0; background: linear-gradient(180deg, #000 0%, rgba(0,0,0,0.15) 100%); opacity: 0.7; }
-  .cards { position: absolute; inset: 0; padding: calc(var(--top) + 70px) 20px calc(90px + var(--safe-b)); }   /* шапка на поездке на 10 ниже */
-  .cards-empty { position: absolute; left: 20px; right: 20px; top: 40%; text-align: center; color: rgba(255,255,255,0.85); font-size: 12px; line-height: 1.6; }
+  .cards { position: relative; min-height: 100vh; min-height: 100dvh; padding: calc(var(--top) + 70px) 20px calc(90px + var(--safe-b)); }   /* шапка на поездке на 10 ниже */
+  .cards-empty { position: fixed; left: 20px; right: 20px; top: 40%; text-align: center; color: rgba(255,255,255,0.85); font-size: 12px; line-height: 1.6; }
   .cards-empty .add { width: 48px; height: 48px; margin: 0 auto 14px; background: var(--glass); }
-  .morph { position: absolute; z-index: 3; overflow: hidden; display: none; background: var(--photo, var(--spb-photo)) center / cover no-repeat, #3A3532; }   /* фото: растёт из карточки и остаётся фоном экрана поездки */
+  .morph { position: fixed; z-index: 3; overflow: hidden; display: none; background: #3A3532; }   /* фото: растёт из карточки и остаётся фоном экрана поездки */
+  .morph .img { position: absolute; inset: 0; background: var(--photo, var(--spb-photo)) center / cover no-repeat; transform-origin: 50% 50%; }   /* в размытом состоянии слегка увеличен — края без каймы; в карточке 1:1 с её фоном */
   .morph .shade { position: absolute; inset: 0; background: linear-gradient(180deg, #000 0%, rgba(0,0,0,0.15) 100%); }
-  .fab { position: absolute; right: 20px; bottom: calc(16px + var(--safe-b)); width: 48px; height: 48px; border-radius: 50%; border: 0; z-index: 7;
+  .fab { position: fixed; right: 20px; bottom: calc(16px + var(--safe-b)); width: 48px; height: 48px; border-radius: 50%; border: 0; z-index: 7;
          background: var(--glass); color: var(--black); display: grid; place-items: center; opacity: 0; pointer-events: none;
          -webkit-backdrop-filter: blur(var(--panel-blur)); backdrop-filter: blur(var(--panel-blur)); }
-  .fab.home-fab { position: fixed; right: max(20px, calc(50% - 240px)); bottom: calc(var(--tab-h) + 16px); background: #F5F5F5; }
+  .fab.home-fab { bottom: calc(var(--tab-h) + 16px); background: #F5F5F5; }
 
   /* ===== Карточки ===== */
   .card { position: relative; width: 100%; border-radius: var(--r-panel); margin-bottom: 10px; }
@@ -175,14 +179,15 @@
   .editing .cards .tools { background: rgba(0,0,0,0.2); }
 
   /* ===== Нижнее меню ===== */
-  .tabbar { position: fixed; left: max(0px, calc(50% - 260px)); right: max(0px, calc(50% - 260px)); bottom: 0; height: var(--tab-h);   /* прибито к реальному низу окна */ padding-bottom: var(--safe-b); z-index: 9; display: flex; background: rgba(255,255,255,0.92); border-top: 1px solid var(--panel-border);
+  .tabbar { position: fixed; left: 0; right: 0; bottom: 0; height: var(--tab-h);   /* прибито к реальному низу окна */ padding-bottom: var(--safe-b); z-index: 9; display: flex; background: rgba(255,255,255,0.92); border-top: 1px solid var(--panel-border);
             -webkit-backdrop-filter: blur(var(--panel-blur)); backdrop-filter: blur(var(--panel-blur)); }
   .tab { flex: 1; border: 0; background: none; color: var(--label); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 10px; font-weight: 500; }
   .tab[aria-selected="true"] { color: var(--black); } .tab svg { width: 22px; height: 22px; display: block; }
 
   /* ===== Разделы ===== */
-  .page { position: absolute; inset: 0 0 var(--tab-h); background: var(--white); z-index: 8; display: none; padding: var(--top) 20px 24px; }
+  .page { position: fixed; top: 0; bottom: var(--tab-h); left: 0; right: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; background: var(--white); z-index: 8; display: none; padding: var(--top) 20px 24px; }
   .page.on { display: block; }
+  .page { will-change: transform; }
   .sheet, .morph { will-change: transform; }   /* контейнеры карточек без will-change: в Safari он ломает размытие фона у вложенных карточек */
   .page > .h1 { height: 36px; display: flex; align-items: center; justify-content: space-between; }
   .page > .h1 .add { margin: 0; }
@@ -199,8 +204,8 @@
   .bar { height: 6px; border-radius: 3px; background: #EFEFEF; overflow: hidden; margin-top: 10px; } .bar i { display: block; height: 100%; width: 0; background: var(--accent); border-radius: 3px; }
 
   /* ===== Шторки ===== */
-  .dim { position: absolute; inset: 0; background: rgba(0,0,0,0.35); z-index: 20; opacity: 0; display: none; }
-  .sheet { position: absolute; left: 0; right: 0; bottom: 0; max-height: 92%; z-index: 21; display: none; overflow-y: auto; background: var(--white); border-radius: 16px 16px 0 0; transform: translateY(100%); -webkit-overflow-scrolling: touch; }   /* обычный блок: высота — строго по содержимому */
+  .dim { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 20; opacity: 0; display: none; }
+  .sheet { position: fixed; left: 0; right: 0; bottom: 0; max-height: 92%; z-index: 21; display: none; overflow-y: auto; background: var(--white); border-radius: 16px 16px 0 0; transform: translateY(100%); -webkit-overflow-scrolling: touch; }   /* обычный блок: высота — строго по содержимому */
   .sheet-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px 0; }
   .sheet-body { padding: 6px 20px calc(10px + var(--safe-b)); }
   .x { background: #F5F5F5; }
@@ -239,7 +244,7 @@
 
 
   /* ===== Скелет загрузки ===== */
-  .skeleton { position: absolute; inset: 0; padding: var(--top) 20px 20px; background: var(--white); z-index: 30; }
+  .skeleton { position: fixed; inset: 0; padding: var(--top) 20px 20px; background: var(--white); z-index: 30; }
   .sk { background: #EDEDED; border-radius: 16px; position: relative; overflow: hidden; }
   .sk::after { content: ''; position: absolute; inset: 0; transform: translateX(-100%); background: linear-gradient(90deg, transparent, rgba(255,255,255,0.55) 50%, transparent); animation: shimmer 1.8s ease-in-out infinite; }
   @keyframes shimmer { to { transform: translateX(100%); } }
@@ -292,7 +297,7 @@
         <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M7 0.75v12.5M0.75 7h12.5"/></svg>
       </button>
     </div>
-    <div class="morph" id="morph" aria-hidden="true"><div class="shade" id="morphShade"></div></div>
+    <div class="morph" id="morph" aria-hidden="true"><div class="img" id="morphImg"></div><div class="shade" id="morphShade"></div></div>
     <div class="hdr-bg light" id="hdrBgHome" aria-hidden="true"></div>
     <button class="fab home-fab" id="homeFab" type="button" aria-label="Добавить поездку">
       <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M7 0.75v12.5M0.75 7h12.5"/></svg>
@@ -345,8 +350,8 @@
       <button class="btn-soft" id="exportBtn" type="button" style="margin-top:20px"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 10V2M4.5 5.5L8 2l3.5 3.5M2 10v3a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-3"/></svg>Выгрузить данные</button>
       <button class="btn-soft" id="importBtn" type="button" style="margin-top:10px"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v8M4.5 6.5L8 10l3.5-3.5M2 10v3a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-3"/></svg>Загрузить данные</button>
       <input id="importFile" type="file" accept="application/json,.json" class="hidden">
-      <p class="hint" id="buildVer" style="margin-top:16px;text-align:center"></p>
       <button class="btn-soft red" id="wipe" type="button" style="margin-top:10px"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 3.5h10M5 3.5V2h4v1.5M3.5 3.5l.7 8.5h5.6l.7-8.5"/></svg>Очистить все данные</button>
+      <p class="hint" id="buildVer" style="margin-top:20px;text-align:center"></p>
     </section>
 
     <nav class="tabbar" id="tabbar" aria-label="Разделы">
@@ -524,13 +529,13 @@
   const spring = { type: "spring", stiffness: 300, damping: 26 }, soft = { type: "spring", stiffness: 220, damping: 24 }, menuSpring = { type: "spring", stiffness: 170, damping: 20 };
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const $ = (id) => document.getElementById(id);
-  const BUILD = "v18";
+  const BUILD = "v29";
   // запрет масштабирования жестами (iOS игнорирует user-scalable)
   document.addEventListener("gesturestart", (e) => e.preventDefault(), { passive: false });
   document.addEventListener("touchmove", (e) => { if (e.scale && e.scale !== 1) e.preventDefault(); }, { passive: false });
   let lastTap = 0; document.addEventListener("touchend", (e) => { const n = Date.now(); if (n - lastTap < 300 && !e.target.closest("input, textarea")) e.preventDefault(); lastTap = n; }, { passive: false });
   // появление без «моргания»: сначала прячем, потом анимируем — иначе первый кадр рисуется видимым
-  const fadeIn = (target, opts = {}, from = {}) => { const els = typeof target === "string" ? [...document.querySelectorAll(target)] : [].concat(target); els.forEach(el => { el.style.opacity = 0; }); return animate(els, { opacity: 1, ...Object.fromEntries(Object.entries(from).map(([k, v]) => [k, [v, 0]])) }, { duration: 0.45, ease: [0.22, 1, 0.36, 1], ...opts }); };
+  const fadeIn = (target, opts = {}, from = {}) => { const els = typeof target === "string" ? [...document.querySelectorAll(target)] : (target instanceof NodeList || Array.isArray(target)) ? [...target] : [target]; els.forEach(el => { el.style.opacity = 0; }); return animate(els, { opacity: 1, ...Object.fromEntries(Object.entries(from).map(([k, v]) => [k, [v, 0]])) }, { duration: 0.45, ease: [0.22, 1, 0.36, 1], ...opts }); };
   const phone = $("phone"), content = $("content"), home = $("home"), tripList = $("tripList"), detail = $("detail"), cards = $("cards"), cardList = $("cardList");
   const uid = () => Math.random().toString(36).slice(2, 10);
 
@@ -696,10 +701,27 @@
   });
   // микро-анимации кнопок на любых карточках (наведение/нажатие)
   document.addEventListener("pointerover", (e) => {
-    const b = e.target.closest(".round, .edit-btn, .fav-move, .add, .fab, .copy, .pill-fill"); if (!b || b._hov) return; b._hov = true;
+    const b = e.target.closest(".round, .edit-btn, .fav-move, .add, .fab"); if (!b || b._hov) return; b._hov = true;
     animate(b, { scale: 1.08 }, spring);
-    b.addEventListener("pointerleave", () => { b._hov = false; animate(b, { scale: 1 }, spring); }, { once: true });
+    // у каждой кнопки — свой характер
+    if (b.matches(".pin")) animate(b.querySelector("svg"), { y: [0, -4, 0], scaleY: [1, 1.08, 1] }, { duration: 0.5, ease: "easeOut" });          // пин подпрыгивает
+    if (b.matches(".add, .fab")) animate(b.querySelector("svg"), { rotate: 90 }, menuSpring);                                                    // плюс поворачивается
+    if (b.matches(".edit-btn, .fav-move")) animate(b.querySelector("svg"), { rotate: [0, -12, 10, 0] }, { duration: 0.5, ease: "easeInOut" });   // карандаш качается
+    b.addEventListener("pointerleave", () => { b._hov = false; animate(b, { scale: 1 }, spring); if (b.matches(".add, .fab")) animate(b.querySelector("svg"), { rotate: 0 }, menuSpring); }, { once: true });
   });
+  // Airbnb — блик, копирование — наклон, самолёт — перелёт по всей линии
+  document.addEventListener("pointerover", (e) => {
+    const pill = e.target.closest(".pill-fill");
+    if (pill && !pill._hov) { pill._hov = true; const sh = pill.querySelector(".shine"); const a = animate(sh, { x: ["-160%", "260%"] }, { duration: 1.1, repeat: Infinity, repeatDelay: 0.35, ease: "easeInOut" });
+      pill.addEventListener("pointerleave", () => { pill._hov = false; a.stop(); animate(sh, { x: "-160%" }, { duration: 0 }); }, { once: true }); }
+    const cp = e.target.closest(".copy");
+    if (cp && !cp._hov) { cp._hov = true; animate(cp.querySelector("svg"), { scale: 1.15, rotate: -6 }, spring); cp.addEventListener("pointerleave", () => { cp._hov = false; animate(cp.querySelector("svg"), { scale: 1, rotate: 0 }, spring); }, { once: true }); }
+  });
+  const flyPlane = (card) => {                          // самолёт чуть подаётся вперёд и возвращается — след за ним остаётся на месте
+    const plane = q(card, ".plane"); if (!plane || card._flying) return; card._flying = true;
+    animate(plane, { x: [0, 4, 0] }, { duration: 0.7, ease: "easeInOut" }).finished.then(() => card._flying = false);   // единственная анимация самолёта: 4px вправо и обратно
+  };
+  document.addEventListener("click", (e) => { const pl = e.target.closest(".pill-fill"); if (pl) animate(pl, { scale: [0.94, 1] }, { type: "spring", stiffness: 500, damping: 20 }); });
   document.addEventListener("pointerdown", (e) => {
     const b = e.target.closest(".round, .edit-btn, .fav-move, .add, .fab, .tab, .primary, .secondary, .btn-soft, .swatch, .emoji, .seg button"); if (!b) return;
     animate(b, { scale: 0.92 }, { duration: 0.08 });
@@ -707,7 +729,7 @@
   });
   document.addEventListener("pointerover", (e) => {
     const f = e.target.closest(".flight"); if (!f || f._hov) return; f._hov = true;
-    animate(q(f, ".plane"), { x: [0, 8, 0] }, { duration: 0.9, ease: [0.33, 1, 0.68, 1] });
+    flyPlane(f);
     f.addEventListener("pointerleave", () => f._hov = false, { once: true });
   });
 
@@ -759,7 +781,8 @@
   let screen = "main", transitioning = false;
   const morph = $("morph"), morphShade = $("morphShade"), backBtn = $("backBtn"), tabbar = $("tabbar");
   const phoneRect = () => phone.getBoundingClientRect();
-  const relRect = (el) => { const r = el.getBoundingClientRect(), p = phoneRect(); return { left: r.left - p.left, top: r.top - p.top, width: r.width, height: r.height }; };
+  const relRect = (el) => { const r = el.getBoundingClientRect(); return { left: r.left, top: r.top, width: r.width, height: r.height }; };   /* морф — fixed, координаты окна */
+  const fullRect = () => { const p = phoneRect(); return { left: p.left, top: 0, width: p.width, height: innerHeight }; };
   function renderDetail(trip) {
     detail.style.setProperty("--photo", `url("${trip.photo || SPB_PHOTO}")`);
     $("titleTrip").textContent = trip.title;
@@ -771,29 +794,30 @@
     const ease = [0.22, 1, 0.36, 1], d = reduce ? 0 : 0.9;
     const r0 = relRect(card);
     morph.style.setProperty("--photo", `url("${trip.photo || SPB_PHOTO}")`);
-    Object.assign(morph.style, { display: "block", left: r0.left + "px", top: r0.top + "px", width: r0.width + "px", height: r0.height + "px", borderRadius: "16px", filter: "blur(0px)" });
-    morphShade.style.opacity = 0.5;
+    Object.assign(morph.style, { display: "block", left: r0.left + "px", top: r0.top + "px", width: r0.width + "px", height: r0.height + "px", borderRadius: "16px" });
+    $("morphImg").style.filter = "blur(0px)"; $("morphImg").style.transform = "scale(1)";
+    morphShade.style.opacity = 0.7;
     renderDetail(trip);
     setEditing(false); phone.classList.add("is-trip");
     // карточки уже на месте, но невидимы — проявятся, пока фото ещё растёт
     const cardEls = [...cards.querySelectorAll("#cardList > .card, .cards-empty:not(.hidden)")];
     cardEls.forEach(el => el.style.opacity = 0);
-    detail.style.display = "block"; cards.scrollTop = 0;
+    home.classList.add("leaving"); detail.style.display = "block"; window.scrollTo(0, 0);
     for (const b of [backBtn, $("editTrip")]) { b.style.opacity = 0; b.classList.remove("off"); }
     $("titleTrip").style.opacity = 0;
 
-    animate(home, { opacity: 0 }, { duration: d * 0.55, ease: "easeOut" });
+    animate(home, { opacity: 0 }, { duration: d * 0.55, ease: "easeOut" }).finished.then(() => { home.style.display = "none"; home.classList.remove("leaving"); });
     animate($("hdrBgHome"), { opacity: 0 }, { duration: d * 0.4 });
     animate($("editHome"), { opacity: 0 }, { duration: d * 0.35 }); $("editHome").style.pointerEvents = "none";
     animate("#titleMain", { opacity: 0 }, { duration: d * 0.35 });
     animate("#titles", { x: 0 }, { duration: d, ease });
     animate(".header", { y: 10 }, { duration: d, ease });
     animate(tabbar, { y: tabbar.offsetHeight + 16 }, { duration: d * 0.8, ease });
-    animate(morphShade, { opacity: 0.7 }, { duration: d, ease });
-    animate(morph, { filter: "blur(3px)" }, { duration: d, ease });
+    animate($("morphImg"), { filter: "blur(3px)", scale: 1.06 }, { duration: d, ease });
     fadeIn([backBtn, $("editTrip"), $("titleTrip")], { duration: d * 0.6, delay: d * 0.35, ease });
     fadeIn(cardEls, { duration: d * 0.7, delay: stagger(0.07, { startDelay: d * 0.45 }), ease }, { y: 18 });
-    await animate(morph, { left: 0, top: 0, width: phone.clientWidth, height: phone.clientHeight, borderRadius: 0 }, { duration: d, ease }).finished;
+    const F = fullRect();
+    await animate(morph, { left: F.left, top: 0, width: F.width, height: F.height, borderRadius: 0 }, { duration: d, ease }).finished;
     if (cur.trip.cards.length) fabVisible(fab, true);
     screen = "trip"; transitioning = false;
   }
@@ -801,24 +825,32 @@
     if (transitioning || screen !== "trip") return; transitioning = true;
     const ease = [0.22, 1, 0.36, 1], d = reduce ? 0 : 0.9;
     setEditing(false); fabVisible(fab, false); $("hdrBg").style.opacity = 0;
-    renderHome(); home.scrollTop = 0; home.style.opacity = 0;
+    renderHome(); home.style.display = ""; detail.classList.add("leaving"); window.scrollTo(0, 0);
     const card = [...tripList.children].find(c => c._trip === cur.trip);
-    const r1 = card ? relRect(card) : { left: 20, top: 145, width: phone.clientWidth - 40, height: 140 };
+    // главная сразу на месте, но содержимое своей карточки спрятано: оно проявится, когда фото сядет в карточку
+    const inner = card ? [q(card, ".trip-title"), q(card, ".share"), ...card.querySelectorAll(".preview > .card")] : [];
+    inner.forEach(el => el.style.opacity = 0);
+    home.style.opacity = 0;
+    const r1 = card ? relRect(card) : { left: phoneRect().left + 20, top: 145, width: phoneRect().width - 40, height: 140 };
     // всё одновременно: карточки и шапка тают, фото сжимается в свою карточку, главный экран проявляется
-    animate("#cardList > .card, .cards-empty", { opacity: 0, y: 10 }, { duration: d * 0.45, ease: "easeIn" }).finished.then(() => { detail.style.display = "none"; });
+    animate("#cardList > .card, .cards-empty", { opacity: 0, y: 10 }, { duration: d * 0.45, ease: "easeIn" }).finished.then(() => { detail.style.display = "none"; detail.classList.remove("leaving"); });
     animate([backBtn, $("editTrip"), $("titleTrip")], { opacity: 0 }, { duration: d * 0.4 }).finished.then(() => [backBtn, $("editTrip")].forEach(b => b.classList.add("off")));
     phone.classList.remove("is-trip");
-    animate(home, { opacity: 1 }, { duration: d * 0.8, delay: d * 0.25, ease });
-    animate($("hdrBgHome"), { opacity: hdrOpacity(home.scrollTop) }, { duration: d * 0.5, delay: d * 0.4 });
+    animate(home, { opacity: 1 }, { duration: d * 0.6, delay: d * 0.15, ease });
+    animate($("hdrBgHome"), { opacity: 0 }, { duration: d * 0.5, delay: d * 0.4 });
     animate($("editHome"), { opacity: 1 }, { duration: d * 0.5, delay: d * 0.4 }); $("editHome").style.pointerEvents = "auto";
     animate("#titleMain", { opacity: 1 }, { duration: d * 0.5, delay: d * 0.4 });
     animate("#titles", { x: -48 }, { duration: d, ease });
     animate(".header", { y: 0 }, { duration: d, ease });
     animate(tabbar, { y: 0 }, { duration: d, ease });
-    animate(morphShade, { opacity: 0.5 }, { duration: d, ease });
-    animate(morph, { filter: "blur(0px)" }, { duration: d * 0.7, ease });
+    animate($("morphImg"), { filter: "blur(0px)", scale: 1 }, { duration: d * 0.7, ease });
     await animate(morph, { left: r1.left, top: r1.top, width: r1.width, height: r1.height, borderRadius: 16 }, { duration: d, ease }).finished;
-    morph.style.display = "none";
+    // фото село точно на карточку — не выключаем резко, а растворяем поверх неё
+    animate(morph, { opacity: 0 }, { duration: 0.35, ease: "easeOut" }).finished.then(() => { morph.style.display = "none"; morph.style.opacity = 1; });
+    if (card) {
+      fadeIn([q(card, ".trip-title"), q(card, ".share")], { duration: 0.45, ease });
+      fadeIn(card.querySelectorAll(".preview > .card"), { duration: 0.6, delay: stagger(0.1, { startDelay: 0.05 }), ease }, { y: 16 });
+    }
     screen = "main"; transitioning = false;
   }
   backBtn.addEventListener("click", closeTrip);
@@ -864,8 +896,11 @@
   const fab = $("fab"), homeFab = $("homeFab");
   // подложка под шапкой появляется только когда контент доезжает до неё (плюс начинается через 24px после шапки)
   const hdrOpacity = (st) => Math.max(0, Math.min(1, (st - 20) / 30));
-  cards.addEventListener("scroll", () => { $("hdrBg").style.opacity = hdrOpacity(cards.scrollTop); }, { passive: true });
-  home.addEventListener("scroll", () => { fabVisible(homeFab, home.scrollTop > 101); $("hdrBgHome").style.opacity = hdrOpacity(home.scrollTop); }, { passive: true });
+  window.addEventListener("scroll", () => {
+    const st = window.scrollY;
+    if (screen === "trip") $("hdrBg").style.opacity = hdrOpacity(st);
+    else if (tab === "main") { fabVisible(homeFab, st > 101); $("hdrBgHome").style.opacity = hdrOpacity(st); }
+  }, { passive: true });
   fab.addEventListener("click", () => openSheet()); $("detailAdd").addEventListener("click", () => openSheet());
   homeFab.addEventListener("click", () => openTripSheet()); $("homeAdd").addEventListener("click", () => openTripSheet());
   hover($("homeAdd"), () => { animate($("homeGhost"), { y: -6 }, soft); return () => animate($("homeGhost"), { y: 0 }, soft); });
@@ -980,7 +1015,7 @@
     const card = { id: uid(), type, data: d }; cur.trip.cards.push(card);
     const el = buildCard(card); el.style.opacity = 0; cardList.appendChild(el);
     $("cardsEmpty").classList.add("hidden"); fabVisible(fab, true);
-    await hideSheet(); cards.scrollTo({ top: cards.scrollHeight, behavior: "smooth" });
+    await hideSheet(); window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     fadeIn(el, { duration: 0.5 }, { y: 16 }); save();
   });
 
@@ -998,7 +1033,7 @@
     const title = val("tTitle") || "Поездка", start = dval("tStart"), end = dval("tEnd");
     if (tripEdit) { Object.assign(tripEdit, { title, start, end, photo: tripPhoto || tripEdit.photo }); }
     else state.trips.unshift({ id: uid(), title, start, end, photo: tripPhoto || "", cards: [], preview: [] });
-    await hideSheet(); save(); renderHome(); home.scrollTop = 0;
+    await hideSheet(); save(); renderHome(); window.scrollTo(0, 0);
     const first = [...tripList.children].find(c => c._trip === (tripEdit || state.trips[0])); if (first && !tripEdit) fadeIn(first, { duration: 0.5 }, { y: 16 });
   });
 
@@ -1017,15 +1052,20 @@
      Нижнее меню, избранное, профиль
      ========================================================= */
   const PAGES = { archive: $("pageArchive"), fav: $("pageFav"), profile: $("pageProfile") }; let tab = "main";
+  const TAB_ORDER = ["main", "archive", "fav", "profile"];
   function setTab(name, force = false) {
     if ((name === tab && !force) || (screen === "trip" && !force)) return;
-    const prev = PAGES[tab]; tab = name;
-    tabbar.querySelectorAll(".tab").forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === name)));
-    const next = PAGES[name];
-    // новая страница появляется ПОД уходящей, а та плавно растворяется — без вспышки главного экрана между ними
-    if (next) { next.style.opacity = 1; next.style.zIndex = 8; next.classList.add("on"); }
-    if (prev) { prev.style.zIndex = 9; animate(prev, { opacity: 0 }, { duration: 0.35, ease: [0.4, 0, 0.2, 1] }).finished.then(() => { prev.classList.remove("on"); prev.style.zIndex = 8; }); }
-    else if (next) { next.style.opacity = 0; animate(next, { opacity: 1 }, { duration: 0.35, ease: [0.4, 0, 0.2, 1] }); }
+    const dir = TAB_ORDER.indexOf(name) > TAB_ORDER.indexOf(tab) ? 1 : -1;   // вправо по меню — контент приходит справа
+    const prev = PAGES[tab] || home, prevIsHome = !PAGES[tab]; tab = name;
+    tabbar.querySelectorAll(".tab").forEach(b => { const on = b.dataset.tab === name; b.setAttribute("aria-selected", String(on)); if (on) animate(b.querySelector("svg"), { scale: [1, 1.18, 1], y: [0, -2, 0] }, { duration: 0.45, ease: [0.34, 1.56, 0.64, 1] }); });
+    const next = PAGES[name] || home, nextIsHome = !PAGES[name];
+    const ease = [0.22, 1, 0.36, 1], dur = 0.5;
+    // чистый сдвиг без прозрачности: уходящая уезжает целиком, новая въезжает с другой стороны, между ними — белый экран
+    const W = innerWidth;
+    if (!prevIsHome) { prev.style.zIndex = 9; animate(prev, { x: -W * dir }, { duration: dur, ease }).finished.then(() => { prev.classList.remove("on"); prev.style.zIndex = 8; prev.style.transform = ""; }); }
+    else animate(home, { x: -W * dir }, { duration: dur, ease }).finished.then(() => { if (tab !== "main") home.style.transform = ""; });
+    if (!nextIsHome) { next.style.zIndex = 8; next.classList.add("on"); next.style.opacity = 1; animate(next, { x: [W * dir, 0] }, { duration: dur, ease }); if (next.scrollTo) next.scrollTo(0, 0); }
+    else { home.style.opacity = 1; animate(home, { x: [W * dir, 0] }, { duration: dur, ease }); }
     if (name === "profile") updateProfile();
   }
   tabbar.addEventListener("click", (e) => { const b = e.target.closest(".tab"); if (b) setTab(b.dataset.tab); });
@@ -1090,7 +1130,7 @@
      Старт: загрузка данных, скелет → контент
      ========================================================= */
   const skeleton = $("skeleton");
-  const ready = load().then(() => { renderHome(); renderFav(); updateProfile(); $("buildVer").textContent = `Сборка ${BUILD} · экран ${innerWidth}×${innerHeight}`; });
+  const ready = load().then(() => { renderHome(); renderFav(); updateProfile(); $("buildVer").textContent = `Сборка ${BUILD}`; });
   const t0 = Date.now();
   ready.then(() => setTimeout(() => {
     if (reduce) { skeleton.remove(); content.style.opacity = 1; return; }
