@@ -8,10 +8,18 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Поездки">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="Поездки">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/svg+xml" href="./icons/favicon.svg">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+<!-- иконка на домашнем экране iPhone/iPad: несколько размеров, Safari берёт подходящий -->
 <link rel="apple-touch-icon" href="./icons/icon-180.png">
+<link rel="apple-touch-icon" sizes="120x120" href="./icons/icon-120.png">
+<link rel="apple-touch-icon" sizes="152x152" href="./icons/icon-152.png">
+<link rel="apple-touch-icon" sizes="167x167" href="./icons/icon-167.png">
+<link rel="apple-touch-icon" sizes="180x180" href="./icons/icon-180.png">
+<link rel="apple-touch-icon-precomposed" sizes="180x180" href="./icons/icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
 <style>
@@ -30,7 +38,7 @@
     --flat-photo: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwMDAgQDAwMEBAQFBgoGBgUFBgwICQcKDgwPDg4MDQ0PERYTDxAVEQ0NExoTFRcYGRkZDxIbHRsYHRYYGRj/2wBDAQQEBAYFBgsGBgsYEA0QGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBj/wAARCACMAIwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDu1iXGM9e9TrHkgEHFTRw5IJxj1NUPEHiPRPCWhSavr96lrbKQikjc8jdlRRyzH0FeIotuyPpZTUU3J6I4v416rrGg/B3ULrRoiZJSttNKFz5EMmVZ/r0XPbdXzN4a0O2bS01K0uA07ADLIG8lh1A/D/PNfRNx8ULPxh4f1DTofC88NlMDA/8AaeD56MOcIOnGOc15dqHhzTNDhxpVs0NtN/rIvNZvmx1Uk5HHvXn18dCNX6vF+9969D0svw8akfbzjeDTtrZ36M53xHDdQ6DeJN5MsItm83KEMDgdOff8MfSu+8G/tEeFF0TTdJ8R2+qW1zDbrFNfiFZImYDA4Dbug64rzfx3FJaaxD4T0XVortTYxz3c0T+blpBkwhuTlQcH3J6AVyraTYram3+xyLIORjDOO2eD0rvw8LQtVWvl+px46pGc08M3ZLXm7rovL16n2PpOv6F4l0o6l4f1SC/tSdpkhbJVuuGB5U+xxVhguMEEZ7CvkjwB42uvhr4ue4ktpLnTrtPKuolOC6g5Dr/tKc8H1I96+ldN1O51/wCya3p13t0+YO0UQw6TxkjEjnAKnhhtHQnnoaVWlyarYzw9f2itLSSOqihD2q4HUmtXTdDkvJAFQms/T3jWFISZJGBOdo3NyccgV7T8OtCS6ZXnjQHrgHPGeK8yrOXwx3bNKjjC82cva/D+6lgDeSfyrK1XwfPZAloiMe1dD46+Pd34Z8bweGfCnhiw1AAI8st5O0W5WYgbNqnJIUtzgAY5ycD0SOa08YeB01cWJtJ8YlhbnY2Ox7ioqYecI8yld9jmji5XXNGyZ833dj5RIK81XsLbN3Icf3f/AEKuy8RWCw3TqF71gWMYE0/HIKfzNZQq82p3tK1zBjx53HQKf51h+Jcf8IfeY7mL/wBHLW3AczOfbH61h+IwT4Luge/kf+jkr3IbI8t/EY/iY58a+Gh/02uD/wCOrX1T4CT/AIo+M7iMuen+6K+WvEa58eeGhj/lrcZ/JK+ovB9/bWXhaGKV8MTu6ew/wruwvwnLi1qjhJJrexspby6mWKCFGlkkfhUVRkk/QA182J4pm+Knxcu70xj+zNPt2GnRS9IgXA8wju7cn2AA7VtfHv4mW5s5fAWg3O92IXUp4jlVA58gEdTnBb8B615V8OSh8YQWxsYLsTOGdZWwEVQSWzkDgHOD6D0zWFfD/wCyzcr6r8C8LX+tZlTw9Nq0Xd3aSbXTz9O/oet32lTWagrIsoxkheoH064rjfHNxe2fheTULYxj7OCXWQdQeAQc8EEiuqvLi5h8b6ZeWGk2k9vexrFcXm/IZud44ONwXnoSRgdq8++KfiKzu0m0izZXlmn8mVU+7Cu8A89Nxxj2ya+UwmAccXTdLVddPvPss2qeww0vayUW9FZ636fPy7Hnnhu68RWGupr9ppF1eLJuRpPJcpICfm2sO4wOh9jW5FeiLxHcatf25/0lTiMZQg4IGAR8uCTk9a9eOo31xodrol5Z2sGn6Z5CSyLkbI0BCDaDgEgkHaAWyN2SK888T2aR+LobyORJbSa5DoIx3LZbCsCOwz1Geo5r6D6z7aTbjZfic1TKqmBw0Up8zbe1mk/J932PObq/h1bUrsyWnl3NzOq25SQ7YBk5XA65z6ev0r2v4Va/dQeFZdA2xSX2mXTKLSSRYwUaQFzkjOBhsdM5x2xWfeabpes6zc3X9jWcQnZjawtHloyuMNnqoHXPTnjtWHBBqXgv4jQ+LibjUkXP2vY2X2OMGVCOG2/ewR/D+XR9YjUiotWvt/XmcFTJ69CTqxfNbfo1306262ufUmgxS2xTfcSyKZJJCGwACTwBjHABx07ZNe9fDrV4YHVHYDPFfMuhfY7zW11G0muftMJMNy0b5R1K7kSQMSQQHDAD+91r1DRNTmtmUoxFeLXTjJSW6M6kFUjync638Ior3xIt/HZ6hOI+ILvTb2KIvFuLLHOko527iu5c5XGcV3ENuvhrwc9pcyRCZ+fLjbcsa4wEB6tjqT3JNcZZ+Mr+OAIJG6Vk6x4iursHe7GpqYvmjaMbPY4o4Wba5ndIw/Ec6zXTkdzXOWgzNNj/AGSf1q9eys5JPOap6b889zxnAGfyauaCsepb3TmbQDLk+lY/iAf8UpcqPSA/+RVrZtflVuB9ysnxAMeHLoEAfJAen/TVa+hhseV9sx9eGfiB4bXqd9wfp9yvojTLC8n0i3eA4UIB+NfPuqr5nxG8NoB/FP8AzSvrPwnar/wjMOV7/wBBXdhleBy4uXK0z84vC/wq8ceLIVurHSDBaOMi7vj5KMPUAjLfgD9a9O039nWTT2juX8cm11uFmMCw2X7rzFQMACzbmU7sFsAZ4wc17pqVteT2SLYan/ZsiyLI05hWb5FySu1vXjntVXXbjWLCy05PD+l6bf3F5L5cl1fXAH2bKkl1Q/eGcEKp69u9cdPMqtaTi7Jdv+HOaGT0KKUtW/u/I8V0mGfQ4LhdVIvLgXHm/wCiWu0J5h5IXJwASc9Mc9q52/8AhHda7Lcatomr2d5cX2oZt7eJcsFLZdmO7G1GZQSOeSMV2F3FLo+uLreuNc6NbmyH2yKFhcLaSmUrgrnAB+8CSdoJBPHPV/Dm1k0bTItVXwtc2lrIv2ZlvI4obqYElvMVBgMPmXIXkkcZrLDwnRnKd7fqe3mM6GIpQp2vb10+fVnk0sY0HXo59YiS+eXMVzaszY3hAN4xncNxyB6kg9TVbXbTTrvxPYT2em3drbWk8RkDJjJLAu2OiZY7gvTqK9MvNP8ADb/2bPJd/ZWvJHe3baWlLM5kBCsCQjhFUnGM55Umua8VQXsnieHS9C1BGuLlPO8oxPKLKM52hmUH8ARnnP3eayqLmkpq57GAx1KcXSraNqyetu+3fTTT5nMavNCvi25W9aVY5IRCq23y7zzhST91Qx5POB2OKjt5OLqNJo7i0t49huWG1nXqqAYBwMn6+3SrFrp2nvHc2epxyy6hYswkcyBgcsdxGOCSc80afp19f6I1/YLaxWUaOHtnOTMI1G5nYDAYgjGSMnOM1i6qvzR1v+h7/sHvXdl8rXev3tf8Oes+ASb3wbZ3p4LAoyqflJXC5x26dPSvWPDehS30qqq5rzH4Yi3b4a6fJDA0KtNKdhOed3Jz6V9KfDW1gfaxAJArjk5VGo31bPl8y5aFSfKtEWbL4fO1sGfAJFYPiHwfNYxlthI9cV5X8SfH3iqL4mW/2vXk0rTWjS4UO6JuBdgUXepyBtCYXB3Ekk8Y+gPDuoS698OvPvnMrqBiRupBXI/TB+hFa1cJBR91u9r/AHHjxr1YtSlazPDtRt2idgRVTRUy+ot/dj/9leui8Tokd44XHWsHRyBa6u3pF/7K9cMXdHrX925yUP3WA/55jP61l+Jhjw/dAHrHD+kq1pwsPNkz/cUfpWT4tYL4bucHnyoj/wCRUr6On8KPKfxlK4xJ8VPDaHr+/I/Na+wPDUYTw9EMf5wK+QoFEnxl8NA8nZOf/Hkr7G0JduiRD2/pXo4Re4cGNfvI8HtfEWhX3iGfQLLU7e51GCBppbeF9xjUkL82OFOWHU5rD8VWZWxsLgeGo9Xms7sSRwwQtJ9iOArSBifmIyeAPmzj0NeR/svWLt4j8Q6oUxFHbRQ5A43M5cj8k/WvpjZjGc/L/Tn+ZrwsRTWEquEHe1jowWIeJpKpJWueaeJNAs9Z8PC6sLrS3u08q2e5urcFrIMyh5Qmfm3ADIbsQc5WqFvoesXnhW40y+tkuYrWKSN4Yp5EvLsoUVQWdzGjE5z3+78wzXq15pOnalbtDqGn2t2rKVImjDZGNuM9fWuTuNLktfGbaTY3Et39vUpCDc7praTbzvQZMkRRVGSuR8oJOQaqnXdRct9TblUXc82+I1otlp97eQkIzJaLbyMAtzZySSs7hAq4ZB5bEr0yzEZBIPZ+DPDh0HwRFaXVgtteys0lyTN5zOSeCzkZPGOD0PBo8a+G/EGt+MvDumx6VMst2XQ2YATbIGXcRznb5RkA4/i6Z4rqtQj1KC4aK9t40kLEsrBkIyemCPwPvg1liXL2UYs1pNc90zxLxNof/CO6kU0bSJ7gXJaRBAhYgrywJ54GcjPbjsa4uK207UI7y6S7niJ+aSLO3af6jg17p4itpb7RLm2jVPNkiIVJQGUtkFQ34gfrXhTyztHf2ks0ceqXUheXAAB7lSemev51hTnzJRkrpf1+J9vleKniIO795W16/PyPZPh3c20fw4sEtZfMiSWVQ3/Aua9y8CeJ0sZkDPgd6+efBVxKngW0hlt47doWeLbGOGwfvfU9TXX2OrPAwKsRSlSbXMtGfOZg1OvOL7s+idR8L+DfEV2L+aVU3SeeYJYIbiNZD1dBKjeWx7lcZPOM1NrWu6XpOiNp+nN8uSzuxyzserMe5rxKDxbcRx4Ep/OqV74kmuOHkJ+ppVKtaa5X13POhg4qSbd7F/XtTE9w7buprK0q6xpeskH/AJZgf+OtWLd6gWyc0zSbsnTtVXP3go/Q1EaNkjtb0sRW/MkwHsP0rK8X/wDIDukJ/wCWMf8A6NStawIZ5ie7DmsvxdtXTbgf9MV/9GJXuQWiPJfxkGnjd8bPDoP/ADymx/32tfZGigjRovpXxzpXzfHfw4P+mEx/8fFfZGj8aTGMf5xXo4b4DixmskfLXwT8HT+DfhdBHqEXl6jfub26jI5jyAEjPuFC59y1elqQq5YZPf8ADk/rXOw3OrAAC6tsDGP9HPb/AIFVlJ9V4H2u3xx/y7nt/wACrxamGr1JubWrOmk6dGCpx2R0iBQy9Plx19uT+uK8K+HuqS6H8dJLjXWZb/z2+0+dwwJY5z7cjHtivW0m1Y/8vdvz/wBO/v8A71ea6R4gTUfAXjLxrr1vBqGrJNBpljFLGNtkkrvuZB2bCYyeevNbYehOnL3loKdSMlodh4k1P/hIP2yfCt7pEnnJA1tG0kZyCVYs/PspwfpXqvxYl00wgMUFy0uYUJAcr0cgddv9cVwHwH1aEeINRaR0e6jULDIwGUQr0HoK6D4v+CtHuNCsfH2mSNp2tW92sU8kJyt4jggrIp4JHXIx3rqqxlUoyUd2RS5I1oqbsl89TzLUDwTnPv8A5/D868f8aGCwnvtOj8PRzG4TzlukQcM7ZLdM7gVI4OMHkV6Ld3up55ktz/2yP+Nc/qVjPqpBnnEZVSgMSdic98+lePHBVE9dj38BmFKjUUp7fP8AQi8JsYfCNvDhgVJB3HJzxW2s5B4NY1hbjTbEWvnPLhid74B5+lTG4A711KFlY5sTWVWtKcdmzX+2MF6moXvCT1rNN18pGaqvdYP3ql0yFJmlcXZ29afo93m0v1J6lR/OsC4usL1qXRbrMd0M9WX+RqfZovnOw0tiXlx3NZ3jA40+f3iA/wDH1q5ozBi5z0I/lWf4xfGnTH/pn/7MtdsTiXxBo2T8ffDy9f8AR5f/AEMV9k6RxpSD/PSvjbQOfj/4e/695P8A0OvsrSxjTU4/zivQw3wHBi/iR8/QSBquxkE8msa3lHrWlFIB1NSkS2aSfdznHvXk/hFdK8cfGW+0pA2kaVqKlLiO2OWuyGyrsGyqtkbsqAeevJz6lHPkAAc9q8W0LRZD8Sde8V+B9UxpPh8NdXc96AkSuWIEMTAkvltwGQOAeTjmZRY1Kx65bDRvhl+094Z8J2Vt9tgvkVJbi5c7sSkooCjABUjOTn8K7P4vaPf2sK3A1GaSxhm2/ZGxtjLdGGOp7c81wHgLw/L8T/jfafELU9Zjt00lo3e2EJzmNcoi89MnJJ9a9A+Mh182EF08ULaPNNxPGxLGTB2q4IG3jJGMg4600lyuwk3zq54ZfNycVmtKFzzVjUZsMea5+7vQmcGuaSOyItxc4cnNUmvR1DA/Q1jatqfladcSA8iM457nj+tcFbTT7tsczqMAcHrWVjtoUlPqep/b+uSarPeZPWvP5L++hcJ9plX0y9Nm1e8UFHnPHfOCaXKdP1a28juJ7rI61Lot5hphnrIv8q4nR72SWK4ndzhnCjJz0H/162tHu8SyDPWRaTgck5KMrJnr3h2TckvX72P0qj40YDTJzz9z/wBmFSeFnLwynP8AH/Ss3xzqenW9pLaXF9bxTunyxs43HkdqvYygm3oaXh7H/DQXh7A/5dpP/QzX2dpQB0yPI/zivizwnc29/wDHHw3e2cyXFs1vIgmjO5Swckrn1AIOOvIr7W0r/kGR/wCe1ehhfgODGJqpZnxpH4+tF+7pt6fqAKsp8QohjGk3R+pP+FeUQSeKvNxHq1k+CBiW2H17D3qbVdZ8VaBp0V7eS6O8ckohUJbEncVLD+IcYBrf2TSvY81Yq7smesL8RRj/AJBE+P8AgX/xNeZ2OuHQvhx4w8DyTvEdRurW/tJljY+akTOWhcAZU4cEE/KSp55FcgPizr67dtppJBGRus//ALOqC/ES9itbmNtP00/bGVpJPsvzHaScZ3cDJ5HsKiye43Wn2Pob9nHxVqCeOtQ0mVAiX0TTLM7Dau1Tkkfe9O1d345+LcWtfD+Pw5Y2m6X7VvnmkcbAIyQAhHXJ5z6D3r5S0f4ialoOqR3Nlp2nrPINgc2+cBlIOOe4JFdM3xW8R3OnJoculaOIQ5lTZZqGBHXn8apU1sjF4mS1Z0d5eTyk/wCqH0fNYtxBJKeZ4x+NU4fF+oS7jJpdhhXCMRGB1x/jV/8A4TI2dmtw+kxEEnrFGo4dVyCW5+8T0/hPtmJ0oRV5I0pYuvUdoav5GFqeizXlo0K3sSDOW4zkDt1rIt9BEMgb7TFjHriupPxgv4mdLbQtPj2kjMsUbfptP86oXPxl8YSbktn0uyU/xW+nwbx9GKnFYtUtj18P/aMVdJW87GPL4X1W+nA021N5IeiQZZvwwK43VnkimKSgrIpKsD1BBwa6rV/HPinV7Qwah4k1W4iI5ia5YJ/3yCBj8K5jS7eDU/E8aXJYW0K72I4AJ4XPtmsrRv7p6bqVowbrtX8joNM0+f8A4R2B7cJKSnmMI2BIz7flUmlzvHJKrZVxKAVYYI4r3b4V+F9O1y/mHiLSr5LYC1WKWyTzEneaUwxqmMEOG+cn7oXljzXo6fBXwXr2maS11ZTR3N9ObIXEVpKiiZGl8yUg/NHHiBgpbhiyn5cilGjKWpwTxEE/M8Y8H6pFHpd1cS8pEWkb6KuT/KvGbi8n1PVZ9RunLzXEhkZj7np+HT8K988U/DTU/CHgy+urLT9bhsLy2BX+04FieKSVJCIeGO5lCEMemWXHWvny0OcVz14uLsz2sn5ZpyR7L8EMr4sto/4X1GMjjoRBJk/kwr7w0oZ0xP8APaviH4NkwXug25Uf6Xqs1xnHOI4Qg/8AQjX3BpP/ACDE/wA9q7sE/wB0jx85VsXJen5I/OawmVpN2/nCkfkKg8eSeb4ZtQeovIwe/wDyyc/1FdKvw/8AEmlND58mmAyQLIAZHJUF8JuAXI3bhgdTkYHPHP8AxE0nUNI8I2Ul3PbsPt3zmLnDEOM9eQSrDjgEEZyDXqTrQcGrny0MLUU1JrRHkRj+WI/7NPliHk2xx1H9TRCN/lDGflq9cW7LpVlLjqo/ma4rna+hfltj/aVipHWSMf8AjtdZb6Wz+JoYiDysv6YrIuIQNa0sDvNCP/HK9BtbMf8ACf2seOq3H/stdcY6nlVatkvRkOmaHG8V3uXOLlF/9A/xrhvHavYeILy1tWsUdLYusco+bcXQ7zn+HCgfUCvbtFsA0eo/LnF/GMDr0jNZPin4V23iHV7zUjeXKPIfK8qJowQRHuC/MOrY+XnH3skcVGKilBeprlE3Ku15f5Hz9HffvW3Dhuaja8/0ht/Ga9Lv/gr5Tf6LrE+4iFl3ohBMpAQDB9dw55yBXJ6p8N9Zs3eSO4SRVMgJZCuNmdwPoR3z0PBxXm2R9p9ZVtDn5rjMJcEAHgc1a8EXKDUtQuJY/NUbVaE/xKoLHHqQecVn3uk6nabkmtyVX+5zjjPI6jg1f8BGJ9Uu490iyJIHVoxllwh+YDv3yKcYmWIq80dD6X+GVlfS3O7SfGup6ZavcpbwWLO8cLNNZTxRQKRnJMzCVsDAVVJ5FejeELXxnB4cm8r4z+aNY8P+HrLTLmNJLqWK9ZhD9pZXUFY5jHIuTyw3OwBWud+FEF5YjTVTxhbSTve2kcsF0qMWItn/AHMQ/gklb5ycA7VOK9g0G51CKAT6l468MWbS6NYTtqlnFCrXCwTn7XL8x2iE+YkSHkJ5jHqcVvSeh5VVannvi3T9b1DQvEmt3nibW9Vszez31vp95byRRWUY1CeGMqW44RCgUdVIfoRXzDrXh+CHxJqEliyRW0HlSTBzhY2lJ4X24z+NfafxQubQeD9f0l/H893qESzvJpjBflAmWYxkAZBRLq1TJP3Ap6k18dazIW8L+J75R/rbtwh/2YUVB+ua48ZHmlFdz28lqOlGc1rZfqkvzO++Gcls/wASPCKWbyNB5E5QsSFcByu4L2JIb8MelfcOkj/iWJ/ntXw38NYTafEzwJangrpAY/Vmdj/6FX3LpIP9mJitsCrUYnPncufGTfn+Wh8tpruhQ39lDqM2nrdXE9zDJPLauqO0CH7bNjr5cUYMeW5kOCSyjFee/tAtav8ACXRri2t2ja5vobxjuZtkUsUggDNna0jIu4kcAbQuAOb3h7xb4vlutHt5/FOozLJc6HDIZPLYyLNZ3DzBvk/jZUJ/3B755X4vahrVx8EtLi1TXtS1QNqen83sofaRpSuSoAABZ5HZjjkn2FbJHlTldHg1vCjnBIXnOeR/Kty5tydDsrhnHl7VABYjnJ/A1zrMwTIOOa3NSZj4W0XnHQ/zpnNzLRHWPGIdb0xZtsxeeEI3QplMg/gOK9MsYinxBtrKQI7us587b8w24z+eefpXmt7/AMh/Q/8Ar5tv/RYr1W3A/wCFu2P/AFzu/wCa16MFueFXd0vRnUaSZfLvvm2mG9jhBUAZU+XnPr9416xpGm2d54btoZLYzSLpl1IsYj3mQtdKC/DA/u9iMRwWDYBbBWvKbCRo7DW2XGRqUWCfpFXr3geA33gGyvZ7i5DPDcWRjimaNAsk53MApGH4AD9V7YyanEfCaZXpWfp/kN1TS4TLcTHwreXMAZGcRLiRozcJsVSXx5krfvc9I41KsEYiuR8cTeEPBFjNfeK9HeBHn1CC1WOMbdRuBOHiEaMxYIN7szEBSAeeVB9eTSrIBlP2lgbeKzObqXJjiO5ed2d2Sct95ujEivmv9snToNP0DwtqdrLcrO+o3kj75mkUtIkbMQGJ2j5FAUYAHQV59R8sW0fTYePPUUW9Dlrz/hGvFUIMPhCO0jaONdxuC75XO85AA+bOMdgAPeqWi/Crw5Ya7/a1smox3JYPuN0CCQMZI288cVxHhDxDqZSNfOGPpXufhRDqkQa6kf6JgV8/WxFWMviP0Chl+EdJS9n9+pr6HZ6dY3Mc50WzmuEmFyJ5Mq/miEwiTK4+cRsyg9geK3dD0HwJZQx2kng6JrcaLD4c8pr2ZkWwScSmMD1JyS3Vmxk4zWNdxpauEiBwe5JNS2jtvFTTxtaO0jCvlWEqRvyWOr8cap5nhPxb4gn8PeH7GFtMu7mbVYZWe4eQ3EcaRkMM7pIIbcnAwHUKDwM/JWrRzW3w+WzmQrcSxFpEPUPLJkg+/wAwr7Q8INFdXKWVzawTQy/u3V1zuU8EH1yK+PvFqLH42tNMX/j3bVHjKk5O2NiVGfwFdrrSqx9pLomeThaMKVX6rD7Uo6+S6HoXhdFi/aB8NQLwsdh5Y/4Dlf6V9q6QP+JYv1/oK+IvCkjN8ffCcjHLPYsx+pZia+29JJ/s1fr/AEFenho8tNR7HiY+fPWc++p//9k=');
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  :root { --top: calc(10px + env(safe-area-inset-top, 0px)); --tab-h: calc(64px + env(safe-area-inset-bottom, 0px)); }   /* 10 под системной строкой; меню — 4 от края */   /* заголовок — в два раза дальше от края, под системную строку */
+  :root { --top: calc(10px + env(safe-area-inset-top, 0px)); --safe-b: max(4px, calc(env(safe-area-inset-bottom, 0px) - 16px)); --tab-h: calc(60px + var(--safe-b)); }   /* меню опущено в безопасную зону: от подписей до края ~18px */   /* заголовок — в два раза дальше от края, под системную строку */
   html, body { height: 100%; overflow: hidden; position: fixed; inset: 0; width: 100%; overscroll-behavior: none; touch-action: pan-y; }
   body { font-family: var(--font); font-weight: 500; line-height: 1; color: var(--black); background: #E9E9E9; display: flex; justify-content: center; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: 100%; }
   /* основа — на весь экран телефона; на широких экранах ограничена, чтобы не растягиваться на монитор */
@@ -55,8 +63,9 @@
   .hdr-right .off { display: none; }   /* скрытые кнопки не занимают место — видимая стоит вровень с краем карточки */
   .grey { background: #F5F5F5; }
   .round[aria-pressed="true"], .round.grey[aria-pressed="true"] { background: var(--accent); color: var(--white); }
-  .hdr-bg { position: absolute; left: 0; right: 0; top: 0; height: calc(var(--top) + 44px); z-index: 5; opacity: 0; pointer-events: none;
+  .hdr-bg { position: absolute; left: 0; right: 0; top: 0; height: calc(var(--top) + 54px); z-index: 5; opacity: 0; pointer-events: none;
             background: linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.25)); -webkit-backdrop-filter: blur(var(--panel-blur)); backdrop-filter: blur(var(--panel-blur)); }
+  #hdrBgHome { height: calc(var(--top) + 44px); }
   .hdr-bg.light { background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.7)); }
 
   /* ===== Главная: список поездок ===== */
@@ -69,7 +78,7 @@
   .detail .ghost { width: calc(100% - 46px); margin-bottom: -34px; background: var(--glass); -webkit-backdrop-filter: blur(var(--panel-blur)); backdrop-filter: blur(var(--panel-blur)); }
   .trip { position: relative; width: 100%; min-height: 140px; border-radius: var(--r-panel); overflow: hidden; color: var(--white); margin-bottom: 10px; z-index: 1;
           background: var(--photo, var(--spb-photo)) center / cover no-repeat, #3A3532; padding: 32px 10px 10px; }
-  .trip .shade { position: absolute; inset: 0; background: linear-gradient(180deg, #000 0%, rgba(0,0,0,0) 100%); opacity: 0.3; pointer-events: none; }
+  .trip .shade { position: absolute; inset: 0; background: linear-gradient(180deg, #000 0%, rgba(0,0,0,0.15) 100%); opacity: 0.5; pointer-events: none; }
   .trip-title { position: relative; text-align: center; padding: 0 56px; }
   .trip-title .h1 { overflow-wrap: anywhere; line-height: 1.2; }
   .trip-title .cap { margin-top: 6px; font-weight: 700; }
@@ -84,14 +93,14 @@
 
   /* ===== Экран поездки ===== */
   .detail { position: absolute; inset: 0; z-index: 3; display: none; }
-  .detail .bg { position: absolute; inset: -12px; background: var(--photo, var(--spb-photo)) center / cover no-repeat, #3A3532; filter: blur(6px); }   /* лёгкое размытие; inset — чтобы не светились края */
+  .detail .bg { position: absolute; inset: -12px; background: var(--photo, var(--spb-photo)) center / cover no-repeat, #3A3532; filter: blur(3px); }   /* лёгкое размытие; inset — чтобы не светились края */
   .detail .bg .shade { position: absolute; inset: 0; background: linear-gradient(180deg, #000 0%, rgba(0,0,0,0.15) 100%); opacity: 0.7; }
-  .cards { position: absolute; inset: 0; padding: calc(var(--top) + 60px) 20px calc(90px + env(safe-area-inset-bottom, 0px)); }
+  .cards { position: absolute; inset: 0; padding: calc(var(--top) + 70px) 20px calc(90px + var(--safe-b)); }   /* шапка на поездке на 10 ниже */
   .cards-empty { position: absolute; left: 20px; right: 20px; top: 40%; text-align: center; color: rgba(255,255,255,0.85); font-size: 12px; line-height: 1.6; }
   .cards-empty .add { width: 48px; height: 48px; margin: 0 auto 14px; background: var(--glass); }
   .morph { position: absolute; z-index: 4; overflow: hidden; display: none; background: var(--photo, var(--spb-photo)) center / cover no-repeat, #3A3532; }
-  .morph .shade { position: absolute; inset: 0; background: linear-gradient(180deg, #000 0%, rgba(0,0,0,0) 100%); }
-  .fab { position: absolute; right: 20px; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); width: 48px; height: 48px; border-radius: 50%; border: 0; z-index: 7;
+  .morph .shade { position: absolute; inset: 0; background: linear-gradient(180deg, #000 0%, rgba(0,0,0,0.15) 100%); }
+  .fab { position: absolute; right: 20px; bottom: calc(16px + var(--safe-b)); width: 48px; height: 48px; border-radius: 50%; border: 0; z-index: 7;
          background: var(--glass); color: var(--black); display: grid; place-items: center; opacity: 0; pointer-events: none;
          -webkit-backdrop-filter: blur(var(--panel-blur)); backdrop-filter: blur(var(--panel-blur)); }
   .fab.home-fab { bottom: calc(var(--tab-h) + 16px); background: #F5F5F5; }
@@ -167,7 +176,7 @@
   .editing .cards .tools { background: rgba(0,0,0,0.2); }
 
   /* ===== Нижнее меню ===== */
-  .tabbar { position: absolute; left: 0; right: 0; bottom: 0; height: var(--tab-h); padding-bottom: calc(4px + env(safe-area-inset-bottom, 0px)); z-index: 9; display: flex; background: rgba(255,255,255,0.92); border-top: 1px solid var(--panel-border);
+  .tabbar { position: absolute; left: 0; right: 0; bottom: 0; height: var(--tab-h); padding-bottom: var(--safe-b); z-index: 9; display: flex; background: rgba(255,255,255,0.92); border-top: 1px solid var(--panel-border);
             -webkit-backdrop-filter: blur(var(--panel-blur)); backdrop-filter: blur(var(--panel-blur)); }
   .tab { flex: 1; border: 0; background: none; color: var(--label); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 10px; font-weight: 500; }
   .tab[aria-selected="true"] { color: var(--black); } .tab svg { width: 22px; height: 22px; display: block; }
@@ -194,7 +203,7 @@
   .dim { position: absolute; inset: 0; background: rgba(0,0,0,0.35); z-index: 20; opacity: 0; display: none; }
   .sheet { position: absolute; left: 0; right: 0; bottom: 0; max-height: 92%; z-index: 21; display: none; overflow-y: auto; background: var(--white); border-radius: 16px 16px 0 0; transform: translateY(100%); -webkit-overflow-scrolling: touch; }   /* обычный блок: высота — строго по содержимому */
   .sheet-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px 0; }
-  .sheet-body { padding: 6px 20px calc(10px + env(safe-area-inset-bottom, 0px)); }
+  .sheet-body { padding: 6px 20px calc(10px + var(--safe-b)); }
   .x { background: #F5F5F5; }
   .seg { display: flex; gap: 6px; }
   .seg button { flex: 1; height: 36px; border-radius: 10px; border: 1px solid var(--panel-border); background: var(--white); font-size: 12px; font-weight: 500; color: var(--black); }
@@ -225,7 +234,7 @@
   .photo-pick { display: flex; align-items: center; gap: 12px; }
   .photo-prev { width: 70px; height: 70px; border-radius: var(--r-photo); background: #F0F0F0 center / cover no-repeat; flex: none; }
   .photo-prev.wide { width: 110px; }
-  .photo-btn { display: grid; place-items: center; cursor: pointer; flex: 1; }
+  .photo-btn { display: flex; align-items: center; justify-content: center; cursor: pointer; flex: 1; height: 44px; }
   .check { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--panel-border); font-size: 12px; }
   .check input { width: 18px; height: 18px; accent-color: var(--accent); }
 
@@ -445,19 +454,19 @@
           <div class="field"><label for="fFromCity">Город вылета</label><input id="fFromCity" placeholder="Bremen"></div>
           <div class="field"><label for="fToCity">Город прилёта</label><input id="fToCity" placeholder="Pulkovo"></div>
         </div>
-        <div class="grid2"><div class="field"><label for="fDepD">Вылет, дата</label><input id="fDepD" class="datepick" type="text" placeholder="дд.мм.гггг" inputmode="numeric" autocomplete="off"></div><div class="field"><label for="fDepT">Время</label><input id="fDepT" class="timepick" type="text" placeholder="чч:мм" inputmode="numeric" autocomplete="off"></div></div>
-        <div class="grid2"><div class="field"><label for="fArrD">Прилёт, дата</label><input id="fArrD" class="datepick" type="text" placeholder="дд.мм.гггг" inputmode="numeric" autocomplete="off"></div><div class="field"><label for="fArrT">Время</label><input id="fArrT" class="timepick" type="text" placeholder="чч:мм" inputmode="numeric" autocomplete="off"></div></div>
+        <div class="grid2"><div class="field"><label for="fDepD">Вылет, дата</label><input id="fDepD" class="datepick" type="text" placeholder="дд.мм.гггг" autocomplete="off"></div><div class="field"><label for="fDepT">Время</label><input id="fDepT" class="timepick" type="text" placeholder="чч:мм" autocomplete="off"></div></div>
+        <div class="grid2"><div class="field"><label for="fArrD">Прилёт, дата</label><input id="fArrD" class="datepick" type="text" placeholder="дд.мм.гггг" autocomplete="off"></div><div class="field"><label for="fArrT">Время</label><input id="fArrT" class="timepick" type="text" placeholder="чч:мм" autocomplete="off"></div></div>
         <div class="field"><label for="fNo">Номер рейса</label><input id="fNo" placeholder="AG 6749"></div>
         <button class="primary" data-add="flight" type="button">Добавить перелёт</button>
         <button class="btn-soft red del-card hidden" type="button"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 3.5h10M5 3.5V2h4v1.5M3.5 3.5l.7 8.5h5.6l.7-8.5"/></svg>Удалить карточку</button>
       </div>
       <div class="form hidden" id="formStay">
         <div class="field"><label for="sName">Район или название</label><input id="sName" placeholder="Петроградская сторона"></div>
-        <div class="grid2"><div class="field"><label for="sInD">Заезд, дата</label><input id="sInD" class="datepick" type="text" placeholder="дд.мм.гггг" inputmode="numeric" autocomplete="off"></div><div class="field"><label for="sInT">Время</label><input id="sInT" class="timepick" type="text" placeholder="чч:мм" inputmode="numeric" autocomplete="off"></div></div>
-        <div class="grid2"><div class="field"><label for="sOutD">Выезд, дата</label><input id="sOutD" class="datepick" type="text" placeholder="дд.мм.гггг" inputmode="numeric" autocomplete="off"></div><div class="field"><label for="sOutT">Время</label><input id="sOutT" class="timepick" type="text" placeholder="чч:мм" inputmode="numeric" autocomplete="off"></div></div>
+        <div class="grid2"><div class="field"><label for="sInD">Заезд, дата</label><input id="sInD" class="datepick" type="text" placeholder="дд.мм.гггг" autocomplete="off"></div><div class="field"><label for="sInT">Время</label><input id="sInT" class="timepick" type="text" placeholder="чч:мм" autocomplete="off"></div></div>
+        <div class="grid2"><div class="field"><label for="sOutD">Выезд, дата</label><input id="sOutD" class="datepick" type="text" placeholder="дд.мм.гггг" autocomplete="off"></div><div class="field"><label for="sOutT">Время</label><input id="sOutT" class="timepick" type="text" placeholder="чч:мм" autocomplete="off"></div></div>
         <div class="field"><label for="sAddr">Адрес</label><input id="sAddr" placeholder="Улица, дом, квартира"></div>
         <div class="field"><label for="sContact">Контакт хозяина или ссылка на Airbnb</label><input id="sContact" placeholder="+7… или https://airbnb.com/…"></div>
-        <div class="field"><label>Фото</label><div class="photo-pick"><div class="photo-prev" id="sPhotoPrev"></div><label class="secondary photo-btn" for="sPhoto">Выбрать картинку</label><input id="sPhoto" type="file" accept="image/*" class="hidden"></div></div>
+        <div class="field"><label>Фото</label><div class="photo-pick"><div class="photo-prev" id="sPhotoPrev"></div><label class="btn-soft photo-btn" for="sPhoto">Выбрать картинку</label><input id="sPhoto" type="file" accept="image/*" class="hidden"></div></div>
         <button class="primary" data-add="stay" type="button">Добавить жильё</button>
         <button class="btn-soft red del-card hidden" type="button"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 3.5h10M5 3.5V2h4v1.5M3.5 3.5l.7 8.5h5.6l.7-8.5"/></svg>Удалить карточку</button>
       </div>
@@ -487,9 +496,9 @@
     <div class="sheet-body">
       <div class="form" style="margin-top:0">
         <div class="field"><label for="tTitle">Куда летим</label><input id="tTitle" placeholder="Санкт - Петербург"></div>
-        <div class="field"><label for="tStart">Начало</label><input id="tStart" class="datepick" type="text" placeholder="дд.мм.гггг" inputmode="numeric" autocomplete="off"></div>
-        <div class="field"><label for="tEnd">Конец</label><input id="tEnd" class="datepick" type="text" placeholder="дд.мм.гггг" inputmode="numeric" autocomplete="off"></div>
-        <div class="field"><label>Фоновая картинка</label><div class="photo-pick"><div class="photo-prev wide" id="tPhotoPrev"></div><label class="secondary photo-btn" for="tPhoto">Выбрать картинку</label><input id="tPhoto" type="file" accept="image/*" class="hidden"></div></div>
+        <div class="field"><label for="tStart">Начало</label><input id="tStart" class="datepick" type="text" placeholder="дд.мм.гггг" autocomplete="off"></div>
+        <div class="field"><label for="tEnd">Конец</label><input id="tEnd" class="datepick" type="text" placeholder="дд.мм.гггг" autocomplete="off"></div>
+        <div class="field"><label>Фоновая картинка</label><div class="photo-pick"><div class="photo-prev wide" id="tPhotoPrev"></div><label class="btn-soft photo-btn" for="tPhoto">Выбрать картинку</label><input id="tPhoto" type="file" accept="image/*" class="hidden"></div></div>
         <button class="primary" id="tripSave" type="button">Создать поездку</button>
       </div>
     </div>
@@ -758,7 +767,7 @@
     const r0 = relRect(card);
     morph.style.setProperty("--photo", `url("${trip.photo || SPB_PHOTO}")`);
     Object.assign(morph.style, { display: "block", left: r0.left + "px", top: r0.top + "px", width: r0.width + "px", height: r0.height + "px", borderRadius: "16px" });
-    morphShade.style.opacity = 0.3;
+    morphShade.style.opacity = 0.5;
     renderDetail(trip);
     setEditing(false); phone.classList.add("is-trip");
     animate(home, { opacity: 0 }, { duration: d * 0.5 });
@@ -766,6 +775,7 @@
     animate($("editHome"), { opacity: 0 }, { duration: d * 0.4 }); $("editHome").style.pointerEvents = "none";
     animate("#titleMain", { opacity: 0 }, { duration: d * 0.4 });
     animate("#titles", { x: 0 }, { duration: d, ease });
+    animate(".header", { y: 10 }, { duration: d, ease });
     animate(tabbar, { y: tabbar.offsetHeight + 16 }, { duration: d, ease });
     animate(morphShade, { opacity: 0.7 }, { duration: d, ease });
     await animate(morph, { left: 0, top: 0, width: phone.clientWidth, height: phone.clientHeight, borderRadius: 0 }, { duration: d, ease }).finished;
@@ -796,8 +806,9 @@
     animate($("editHome"), { opacity: 1 }, { duration: d * 0.6, delay: d * 0.3 }); $("editHome").style.pointerEvents = "auto";
     animate("#titleMain", { opacity: 1 }, { duration: d * 0.5, delay: d * 0.4 });
     animate("#titles", { x: -48 }, { duration: d, ease });
+    animate(".header", { y: 0 }, { duration: d, ease });
     animate(tabbar, { y: 0 }, { duration: d, ease });
-    animate(morphShade, { opacity: 0.3 }, { duration: d, ease });
+    animate(morphShade, { opacity: 0.5 }, { duration: d, ease });
     await animate(morph, { left: r1.left, top: r1.top, width: r1.width, height: r1.height, borderRadius: 16 }, { duration: d, ease }).finished;
     morph.style.display = "none";
     screen = "main"; transitioning = false;
@@ -909,6 +920,11 @@
   const parseRuDate = (s) => { s = (s || "").trim(); let m = s.match(/^(\d{1,2})[.\/-](\d{1,2})[.\/-](\d{2,4})$/); if (m) { let y = m[3].length === 2 ? "20" + m[3] : m[3]; return `${y}-${p2(+m[2])}-${p2(+m[1])}`; } m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/); return m ? s : ""; };
   const parseTime = (s) => { const m = (s || "").trim().match(/^(\d{1,2})[:.](\d{2})$/); return m ? `${p2(+m[1])}:${m[2]}` : ""; };
   const dval = (id) => parseRuDate($(id).value);
+  // точки и двоеточия подставляются сами по мере набора: 05102026 → 05.10.2026, 1400 → 14:00
+  const maskDate = (s) => { const d = s.replace(/\D/g, "").slice(0, 8); return d.length > 4 ? `${d.slice(0,2)}.${d.slice(2,4)}.${d.slice(4)}` : d.length > 2 ? `${d.slice(0,2)}.${d.slice(2)}` : d; };
+  const maskTime = (s) => { const d = s.replace(/\D/g, "").slice(0, 4); return d.length > 2 ? `${d.slice(0,2)}:${d.slice(2)}` : d; };
+  document.querySelectorAll("input.datepick").forEach(i => i.addEventListener("input", () => { const v = maskDate(i.value); if (v !== i.value) i.value = v; }));
+  document.querySelectorAll("input.timepick").forEach(i => i.addEventListener("input", () => { const v = maskTime(i.value); if (v !== i.value) i.value = v; }));
   const closeDp = () => {};
   const setVal = (id, v) => { const el = $(id); if (el.classList.contains("datepick")) { el.value = fmtRu(v || ""); return; } el.value = v ?? ""; if (el.classList.contains("grow")) autoGrow(el); };
   const autoGrow = (ta) => { ta.style.height = "auto"; ta.style.height = Math.max(60, ta.scrollHeight + 2) + "px"; };
