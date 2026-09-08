@@ -74,7 +74,8 @@
   .add { width: 36px; height: 36px; border: 0; border-radius: 50%; background: #F5F5F5; color: var(--black); display: grid; place-items: center; margin: 0 auto 24px;
          -webkit-backdrop-filter: blur(var(--panel-blur)); backdrop-filter: blur(var(--panel-blur)); }
   .add svg { display: block; }
-  .ghost { display: block; width: calc(100% - 24px); height: 40px; margin: 0 auto -29px; border-radius: 16px; background: #F7F7F7; border: 0; padding: 0; position: relative; z-index: 0; }
+  .top-slot { height: 71px; position: relative; z-index: 0; }   /* плюс + выступ серой карточки; при свайпе схлопывается до нуля, и карточка встаёт на место плюса */
+  .ghost { display: block; width: calc(100% - 24px); height: 40px; margin: 0 auto -29px; border-radius: 16px; background: #F7F7F7; border: 0; padding: 0; position: relative; z-index: 1; }   /* выше плюса: накрывает его при подъёме */
   .detail .add { background: var(--glass); margin-bottom: 24px; }
   .detail .ghost { width: calc(100% - 46px); margin-bottom: -34px; background: var(--glass); -webkit-backdrop-filter: blur(var(--panel-blur)); backdrop-filter: blur(var(--panel-blur)); }
   .trip { position: relative; width: 100%; min-height: 140px; border-radius: var(--r-panel); overflow: hidden; color: var(--white); margin-bottom: 10px; z-index: 1;
@@ -233,16 +234,19 @@
   .bar { height: 6px; border-radius: 3px; background: #EFEFEF; overflow: hidden; margin-top: 10px; } .bar i { display: block; height: 100%; width: 0; background: var(--accent); border-radius: 3px; }
 
   /* ===== Шторки ===== */
+  body.locked { position: fixed; left: 0; right: 0; overflow: hidden; }   /* пока открыта шторка или диалог, страница за ними не прокручивается */
+  .dim, .dlg-dim { touch-action: none; }
   .dim { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 20; opacity: 0; display: none; }
   .sheet { position: fixed; left: 0; right: 0; bottom: 0; max-height: 92%; z-index: 21; display: none; overflow-y: auto; background: var(--white); border-radius: 16px 16px 0 0; transform: translateY(100%); -webkit-overflow-scrolling: touch; }   /* обычный блок: высота — строго по содержимому */
-  .sheet-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px 0; }
-  .sheet-body { padding: 6px 20px calc(10px + var(--safe-b)); }
+  .sheet-head { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; justify-content: space-between; padding: 14px 20px 12px;
+                background: rgba(255,255,255,0.82); -webkit-backdrop-filter: blur(var(--panel-blur)); backdrop-filter: blur(var(--panel-blur)); border-radius: 16px 16px 0 0; }   /* заголовок и крестик остаются при прокрутке шторки */
+  .sheet-body { padding: 6px 20px calc(10px + var(--safe-b)); }   /* с учётом нижнего отступа шапки — втрое больше, чем было */
   .x { background: #F5F5F5; }
-  .seg { display: flex; gap: 6px; }
+  .seg { display: flex; gap: 12px; }
   .seg button { flex: 1; height: 36px; border-radius: 10px; border: 1px solid var(--panel-border); background: var(--white); font-size: 12px; font-weight: 500; color: var(--black); }
   .seg button[aria-pressed="true"] { background: var(--black); color: var(--white); border-color: var(--black); }
   .seg.mode button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); }
-  .field { display: flex; flex-direction: column; gap: 8px; }
+  .field { display: flex; flex-direction: column; gap: 10px; }
   .field label { font-size: 12px; color: var(--black); }   /* подписи полей — чёрные, подсказки внутри — курсивом */
   .field input::placeholder, .field textarea::placeholder { font-style: italic; color: #B0B0B0; }
 
@@ -250,8 +254,8 @@
   .field textarea { height: 96px; padding: 12px; resize: none; line-height: 1.5; }
   .field textarea.grow { height: auto; min-height: 60px; overflow: hidden; }   /* растёт вместе с текстом */
   .field input:focus, .field textarea:focus { border-color: var(--black); }
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 10px; }
-  .form { display: flex; flex-direction: column; gap: 16px; margin-top: 14px; align-items: stretch; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 32px 10px; }
+  .form { display: flex; flex-direction: column; gap: 32px; margin-top: 28px; align-items: stretch; }   /* между пунктами — вдвое свободнее */
   .form > button, .sheet-body > button { width: 100%; align-self: stretch; }
   .hint { font-size: 12px; color: var(--label); line-height: 1.5; }
   .primary { height: 44px; border-radius: 12px; border: 0; background: var(--accent); color: var(--white); font-size: 12px; font-weight: 600; width: 100%; margin-top: 4px; }
@@ -313,11 +317,13 @@
 
     <!-- главная -->
     <div class="home scroll" id="home">
-      <button class="add" id="homeAdd" type="button" aria-label="Добавить поездку">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M7 0.75v12.5M0.75 7h12.5"/></svg>
-      </button>
-      <div class="ghost" id="homeGhost" aria-hidden="true"></div>
-      <div id="tripList"></div>
+      <div class="top-slot" id="topSlot">
+        <button class="add" id="homeAdd" type="button" aria-label="Добавить поездку">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M7 0.75v12.5M0.75 7h12.5"/></svg>
+        </button>
+        <div class="ghost" id="homeGhost" aria-hidden="true"></div>
+      </div>
+      <div id="tripList" style="position:relative"></div>
     </div>
 
     <!-- экран поездки -->
@@ -507,7 +513,7 @@
         <button type="button" data-type="day" aria-pressed="false">День</button>
         <button type="button" data-type="note" aria-pressed="false">Заметка</button>
       </div>
-      <div class="seg mode" id="modeSeg" role="group" aria-label="Способ заполнения" style="margin-top:10px">
+      <div class="seg mode" id="modeSeg" role="group" aria-label="Способ заполнения" style="margin-top:20px">
         <button type="button" data-mode="link" aria-pressed="true">По ссылке</button>
         <button type="button" data-mode="manual" aria-pressed="false">Вручную</button>
       </div>
@@ -616,7 +622,7 @@
   const spring = { type: "spring", stiffness: 300, damping: 26 }, soft = { type: "spring", stiffness: 220, damping: 24 }, menuSpring = { type: "spring", stiffness: 170, damping: 20 };
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const $ = (id) => document.getElementById(id);
-  const BUILD = "v36";
+  const BUILD = "v43";
   // запрет масштабирования жестами (iOS игнорирует user-scalable)
   document.addEventListener("gesturestart", (e) => e.preventDefault(), { passive: false });
   document.addEventListener("touchmove", (e) => { if (e.scale && e.scale !== 1) e.preventDefault(); }, { passive: false });
@@ -749,7 +755,8 @@
       const wrap = $("dlgWrap"), box = $("dlg"), acts = $("dlgActions");
       $("dlgTitle").textContent = title; $("dlgText").textContent = text; $("dlgText").classList.toggle("hidden", !text);
       acts.innerHTML = "";
-      const done = async (v) => { await Promise.all([animate(box, { opacity: 0, scale: 0.96 }, { duration: 0.18 }).finished, animate($("dlgDim"), { opacity: 0 }, { duration: 0.22 }).finished]); wrap.style.display = "none"; res(v); };
+      lockScroll();
+      const done = async (v) => { await Promise.all([animate(box, { opacity: 0, scale: 0.96 }, { duration: 0.18 }).finished, animate($("dlgDim"), { opacity: 0 }, { duration: 0.22 }).finished]); wrap.style.display = "none"; unlockScroll(); res(v); };
       actions.forEach(a => { const b = document.createElement("button"); b.type = "button"; b.className = a.kind === "soft" ? "btn-soft" : "primary " + (a.kind || ""); b.textContent = a.label; b.addEventListener("click", () => done(a.value)); acts.appendChild(b); });
       $("dlgDim").onclick = () => done(null);
       wrap.style.display = "flex";
@@ -896,7 +903,7 @@
     if (e.target.closest(".share")) { openTrip(card._trip, card); return; }
     const tool = e.target.closest("[data-tool]"); if (tool) tripTool(card, tool.dataset.tool);
   });
-  $("archiveList").addEventListener("click", (e) => { const card = e.target.closest(".trip"); if (card && e.target.closest(".share")) { setTab("main", true); openTrip(card._trip, card); } });
+  $("archiveList").addEventListener("click", (e) => { const card = e.target.closest(".trip"); if (card && e.target.closest(".share")) openTrip(card._trip, card); });
   async function tripTool(card, tool) {
     const t = card._trip, i = state.trips.indexOf(t);
     if (tool === "del") { if (!await confirmDelete("Удалить поездку?", `«${t.title}» исчезнет вместе со всеми карточками.`)) return;
@@ -910,7 +917,7 @@
   /* =========================================================
      Экран поездки и переход к нему (фото растёт до полного экрана)
      ========================================================= */
-  let screen = "main", transitioning = false;
+  let screen = "main", transitioning = false, openedFrom = null;   // откуда открыли поездку: null — главная, иначе страница (архив)
   const morph = $("morph"), morphShade = $("morphShade"), backBtn = $("backBtn"), tabbar = $("tabbar");
   const phoneRect = () => phone.getBoundingClientRect();
   const relRect = (el) => { const r = el.getBoundingClientRect(); return { left: r.left, top: r.top, width: r.width, height: r.height }; };   /* морф — fixed, координаты окна */
@@ -925,6 +932,9 @@
     if (transitioning || screen !== "main") return; transitioning = true; cur.trip = trip;
     const ease = [0.22, 1, 0.36, 1], d = reduce ? 0 : 0.9;
     const r0 = relRect(card);
+    openedFrom = PAGES[tab] || null;                    // из архива — вернёмся в архив
+    morph.style.zIndex = openedFrom ? 9 : 3;            // над страницей архива, пока она тает
+    if (openedFrom) animate(openedFrom, { opacity: [1, 0] }, { duration: d * 0.5, ease: "easeOut" }).finished.then(() => { openedFrom.classList.remove("on"); openedFrom.style.opacity = 1; });
     morph.style.setProperty("--photo", `url("${trip.photo || SPB_PHOTO}")`);
     Object.assign(morph.style, { display: "block", left: r0.left + "px", top: r0.top + "px", width: r0.width + "px", height: r0.height + "px", borderRadius: "16px" });
     animate(morph, { opacity: 1 }, { duration: 0 });
@@ -951,6 +961,7 @@
     fadeIn(cardEls, { duration: d * 0.7, delay: stagger(0.07, { startDelay: d * 0.45 }), ease }, { y: 18 });
     const F = fullRect();
     await animate(morph, { left: F.left, top: 0, width: F.width, height: F.height, borderRadius: 0 }, { duration: d, ease }).finished;
+    morph.style.zIndex = 3;
     if (cur.trip.cards.length) fabVisible(fab, true);
     screen = "trip"; transitioning = false;
   }
@@ -959,7 +970,12 @@
     const ease = [0.22, 1, 0.36, 1], d = reduce ? 0 : 0.9;
     setEditing(false); fabVisible(fab, false); $("hdrBg").style.opacity = 0;
     renderHome(); home.style.display = ""; detail.classList.add("leaving"); window.scrollTo(0, 0);
-    const card = [...tripList.children].find(c => c._trip === cur.trip);
+    let card = [...tripList.children].find(c => c._trip === cur.trip);
+    if (openedFrom) {                                   // страница архива возвращается, фото садится в её карточку
+      openedFrom.classList.add("on"); openedFrom.scrollTop = 0; animate(openedFrom, { opacity: [0, 1] }, { duration: d * 0.6, delay: d * 0.3, ease });
+      card = [...$("archiveList").children].find(c => c._trip === cur.trip) || null;
+      morph.style.zIndex = 9;
+    }
     // главная сразу на месте, но содержимое своей карточки спрятано: оно проявится, когда фото сядет в карточку
     const inner = card ? [q(card, ".trip-title"), q(card, ".share"), ...card.querySelectorAll(".preview > .card")] : [];
     inner.forEach(el => el.style.opacity = 0);
@@ -979,7 +995,8 @@
     animate($("morphImg"), { filter: "blur(0px)", scale: 1 }, { duration: d * 0.7, ease });
     await animate(morph, { left: r1.left, top: r1.top, width: r1.width, height: r1.height, borderRadius: 16 }, { duration: d, ease }).finished;
     // фото село точно на карточку — не выключаем резко, а растворяем поверх неё
-    animate(morph, { opacity: [1, 0] }, { duration: 0.35, ease: "easeOut" }).finished.then(() => { morph.style.display = "none"; });
+    animate(morph, { opacity: [1, 0] }, { duration: 0.35, ease: "easeOut" }).finished.then(() => { morph.style.display = "none"; morph.style.zIndex = 3; });
+    openedFrom = null;
     if (card) {
       fadeIn([q(card, ".trip-title"), q(card, ".share")], { duration: 0.45, ease });
       fadeIn(card.querySelectorAll(".preview > .card"), { duration: 0.6, delay: stagger(0.1, { startDelay: 0.05 }), ease }, { y: 16 });
@@ -1032,20 +1049,59 @@
   window.addEventListener("scroll", () => {
     const st = window.scrollY;
     if (screen === "trip") $("hdrBg").style.opacity = hdrOpacity(st);
-    else if (tab === "main") { fabVisible(homeFab, st > 101); $("hdrBgHome").style.opacity = hdrOpacity(st); }
+    else if (tab === "main") { if (st > 40) setHomeCollapsed(true); $("hdrBgHome").style.opacity = hdrOpacity(st); }
   }, { passive: true });
   fab.addEventListener("click", () => openSheet()); $("detailAdd").addEventListener("click", () => openSheet());
   homeFab.addEventListener("click", () => openTripSheet()); $("homeAdd").addEventListener("click", () => openTripSheet());
-  hover($("homeAdd"), () => { animate($("homeGhost"), { y: -6 }, soft); return () => animate($("homeGhost"), { y: 0 }, soft); });
+  hover($("homeAdd"), () => { if (!homeCollapsed) { animate($("homeGhost"), { y: -6 }, soft); return () => animate($("homeGhost"), { y: 0 }, soft); } });
+
+  /* ---- главная: свайп вверх прячет «+» и серую карточку под шапку и показывает круглый «+» внизу; свайп вниз возвращает ---- */
+  let homeCollapsed = false, homeAnimating = false;
+  const HIDE_H = 36 + 24 + 11;                          // высота, которую занимают плюс с отступом и выступ серой карточки
+  async function setHomeCollapsed(on) {
+    if (on === homeCollapsed || homeAnimating || screen !== "main" || tab !== "main") return;
+    homeCollapsed = on; homeAnimating = true;
+    const ease = [0.22, 1, 0.36, 1], add = $("homeAdd"), ghost = $("homeGhost");
+    fabVisible(homeFab, on);
+    // схлопывается только блок с плюсом: карточка поднимается ровно на его высоту и встаёт под шапкой, дальше не идёт
+    const slot = $("topSlot");
+    if (on) {
+      animate(add,   { opacity: [1, 0], y: [0, -14] }, { duration: 0.3, ease: "easeOut" });
+      animate(ghost, { opacity: [1, 0], y: [0, -10] }, { duration: 0.3, ease: "easeOut" });
+      await animate(slot, { height: [HIDE_H, 0] }, { duration: 0.45, ease }).finished;
+      slot.style.visibility = "hidden";
+    } else {
+      slot.style.visibility = "";
+      animate(slot, { height: [0, HIDE_H] }, { duration: 0.45, ease });
+      animate(ghost, { opacity: [0, 1], y: [-10, 0] }, { duration: 0.35, delay: 0.15, ease });
+      await animate(add, { opacity: [0, 1], y: [-14, 0] }, { duration: 0.35, delay: 0.2, ease }).finished;
+    }
+    homeAnimating = false;
+  }
+  let swipeY = null;
+  home.addEventListener("touchstart", (e) => { swipeY = e.touches[0].clientY; }, { passive: true });
+  home.addEventListener("touchmove", (e) => {
+    if (swipeY === null) return; const dy = e.touches[0].clientY - swipeY;
+    // пока список наверху, первый жест управляет только плюсом, а не прокруткой страницы
+    if (window.scrollY <= 0 && ((dy < 0 && !homeCollapsed) || (dy > 0 && homeCollapsed))) e.preventDefault();
+    if (dy < -18 && !homeCollapsed) { setHomeCollapsed(true); swipeY = null; }
+    else if (dy > 18 && homeCollapsed && window.scrollY <= 0) { setHomeCollapsed(false); swipeY = null; }
+  }, { passive: false });
+  home.addEventListener("touchend", () => swipeY = null);
+  home.addEventListener("wheel", (e) => { if (e.deltaY > 8) setHomeCollapsed(true); else if (e.deltaY < -8 && window.scrollY <= 0) setHomeCollapsed(false); }, { passive: true });
   const liftGhost = (g) => animate(g, { y: [0, -10, 0] }, { duration: 0.5, ease: "easeInOut" });   // «плашка вздрагивает» при нажатии на плюс
   $("homeAdd").addEventListener("click", () => liftGhost($("homeGhost")));
 
   /* =========================================================
      Шторки
      ========================================================= */
+  // блокировка прокрутки фона (iOS не слушает overflow:hidden — фиксируем body на текущей позиции)
+  let lockY = 0, locks = 0;
+  function lockScroll() { if (locks++ === 0) { lockY = window.scrollY; document.body.style.top = -lockY + "px"; document.body.classList.add("locked"); } }
+  function unlockScroll() { if (--locks <= 0) { locks = 0; document.body.classList.remove("locked"); document.body.style.top = ""; window.scrollTo(0, lockY); } }
   const dim = $("dim"); let openedSheet = null, heightAnim = null;
   async function showSheet(el) {
-    if (openedSheet) return false; openedSheet = el;
+    if (openedSheet) return false; openedSheet = el; lockScroll();
     heightAnim?.stop(); heightAnim = null;
     el.style.height = ""; el.style.overflow = "";
     dim.style.display = "block"; el.style.display = "block";
@@ -1057,7 +1113,7 @@
     return true;
   }
   async function hideSheet() {
-    const el = openedSheet; if (!el) return; openedSheet = null;
+    const el = openedSheet; if (!el) return; openedSheet = null; unlockScroll();
     animate(dim, { opacity: 0 }, { duration: 0.25 }).finished.then(() => { if (!openedSheet) dim.style.display = "none"; });
     await animate(el, { y: el.offsetHeight + 20 }, { duration: 0.38, ease: [0.4, 0, 0.6, 1] }).finished;
     el.style.display = "none"; heightAnim?.stop(); heightAnim = null; el.style.height = ""; el.style.overflow = "";
@@ -1065,6 +1121,7 @@
   function fixSheetHeight(el) { el.style.height = ""; el.style.overflow = ""; }
   document.querySelectorAll("[data-close]").forEach(b => b.addEventListener("click", hideSheet));
   dim.addEventListener("click", hideSheet);
+  [dim, $("dlgDim")].forEach(el => el.addEventListener("touchmove", (e) => e.preventDefault(), { passive: false }));
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") hideSheet(); });
 
   /* ---- шторка карточки: создание и правка ---- */
