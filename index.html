@@ -13,7 +13,6 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/svg+xml" href="./icons/favicon.svg">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
-<!-- иконка на домашнем экране iPhone/iPad: несколько размеров, Safari берёт подходящий -->
 <link rel="apple-touch-icon" href="./icons/icon-180.png">
 <link rel="apple-touch-icon" sizes="120x120" href="./icons/icon-120.png">
 <link rel="apple-touch-icon" sizes="152x152" href="./icons/icon-152.png">
@@ -92,13 +91,13 @@
   .home-empty { text-align: center; color: var(--label); font-size: 12px; line-height: 1.6; margin-top: 60px; }
 
   /* ===== Экран поездки ===== */
-  .detail { position: absolute; inset: 0; z-index: 3; display: none; }
-  .detail .bg { position: absolute; inset: -12px; background: var(--photo, var(--spb-photo)) center / cover no-repeat, #3A3532; filter: blur(3px); }   /* лёгкое размытие; inset — чтобы не светились края */
+  .detail { position: absolute; inset: 0; z-index: 4; display: none; }   /* прозрачный слой карточек поверх фото-морфа */
+  .detail .bg { display: none; }
   .detail .bg .shade { position: absolute; inset: 0; background: linear-gradient(180deg, #000 0%, rgba(0,0,0,0.15) 100%); opacity: 0.7; }
   .cards { position: absolute; inset: 0; padding: calc(var(--top) + 70px) 20px calc(90px + var(--safe-b)); }   /* шапка на поездке на 10 ниже */
   .cards-empty { position: absolute; left: 20px; right: 20px; top: 40%; text-align: center; color: rgba(255,255,255,0.85); font-size: 12px; line-height: 1.6; }
   .cards-empty .add { width: 48px; height: 48px; margin: 0 auto 14px; background: var(--glass); }
-  .morph { position: absolute; z-index: 4; overflow: hidden; display: none; background: var(--photo, var(--spb-photo)) center / cover no-repeat, #3A3532; }
+  .morph { position: absolute; z-index: 3; overflow: hidden; display: none; background: var(--photo, var(--spb-photo)) center / cover no-repeat, #3A3532; }   /* фото: растёт из карточки и остаётся фоном экрана поездки */
   .morph .shade { position: absolute; inset: 0; background: linear-gradient(180deg, #000 0%, rgba(0,0,0,0.15) 100%); }
   .fab { position: absolute; right: 20px; bottom: calc(16px + var(--safe-b)); width: 48px; height: 48px; border-radius: 50%; border: 0; z-index: 7;
          background: var(--glass); color: var(--black); display: grid; place-items: center; opacity: 0; pointer-events: none;
@@ -171,7 +170,7 @@
   .tools { position: absolute; inset: 0; border-radius: var(--r-panel); background: rgba(0,0,0,0.4); display: none; align-items: center; justify-content: center; gap: 12px; z-index: 5; }
   .tools .round.del { color: #B43831; }
   .editing .cards .tools { display: flex; }
-  .editing .detail .bg .shade { opacity: 0.92; }
+  .editing ~ .morph .shade, .phone.editing .morph .shade { opacity: 0.92; }
   .editing .cards .card > *:not(.tools) { opacity: 0.45; }
   .editing .cards .tools { background: rgba(0,0,0,0.2); }
 
@@ -346,6 +345,7 @@
       <button class="btn-soft" id="exportBtn" type="button" style="margin-top:20px"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 10V2M4.5 5.5L8 2l3.5 3.5M2 10v3a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-3"/></svg>Выгрузить данные</button>
       <button class="btn-soft" id="importBtn" type="button" style="margin-top:10px"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v8M4.5 6.5L8 10l3.5-3.5M2 10v3a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-3"/></svg>Загрузить данные</button>
       <input id="importFile" type="file" accept="application/json,.json" class="hidden">
+      <p class="hint" id="buildVer" style="margin-top:16px;text-align:center"></p>
       <button class="btn-soft red" id="wipe" type="button" style="margin-top:10px"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 3.5h10M5 3.5V2h4v1.5M3.5 3.5l.7 8.5h5.6l.7-8.5"/></svg>Очистить все данные</button>
     </section>
 
@@ -520,6 +520,7 @@
   const spring = { type: "spring", stiffness: 300, damping: 26 }, soft = { type: "spring", stiffness: 220, damping: 24 }, menuSpring = { type: "spring", stiffness: 170, damping: 20 };
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const $ = (id) => document.getElementById(id);
+  const BUILD = "v15";
   // запрет масштабирования жестами (iOS игнорирует user-scalable)
   document.addEventListener("gesturestart", (e) => e.preventDefault(), { passive: false });
   document.addEventListener("touchmove", (e) => { if (e.scale && e.scale !== 1) e.preventDefault(); }, { passive: false });
@@ -763,52 +764,55 @@
   }
   async function openTrip(trip, card) {
     if (transitioning || screen !== "main") return; transitioning = true; cur.trip = trip;
-    const ease = [0.32, 0.72, 0, 1], d = reduce ? 0 : 0.8;
+    const ease = [0.22, 1, 0.36, 1], d = reduce ? 0 : 0.9;
     const r0 = relRect(card);
     morph.style.setProperty("--photo", `url("${trip.photo || SPB_PHOTO}")`);
-    Object.assign(morph.style, { display: "block", left: r0.left + "px", top: r0.top + "px", width: r0.width + "px", height: r0.height + "px", borderRadius: "16px" });
+    Object.assign(morph.style, { display: "block", left: r0.left + "px", top: r0.top + "px", width: r0.width + "px", height: r0.height + "px", borderRadius: "16px", filter: "blur(0px)" });
     morphShade.style.opacity = 0.5;
     renderDetail(trip);
     setEditing(false); phone.classList.add("is-trip");
-    animate(home, { opacity: 0 }, { duration: d * 0.5 });
+    // карточки уже на месте, но невидимы — проявятся, пока фото ещё растёт
+    const cardEls = [...cards.querySelectorAll("#cardList > .card, .cards-empty:not(.hidden)")];
+    cardEls.forEach(el => el.style.opacity = 0);
+    detail.style.display = "block"; cards.scrollTop = 0;
+    for (const b of [backBtn, $("editTrip")]) { b.style.opacity = 0; b.classList.remove("off"); }
+    $("titleTrip").style.opacity = 0;
+
+    animate(home, { opacity: 0 }, { duration: d * 0.55, ease: "easeOut" });
     animate($("hdrBgHome"), { opacity: 0 }, { duration: d * 0.4 });
-    animate($("editHome"), { opacity: 0 }, { duration: d * 0.4 }); $("editHome").style.pointerEvents = "none";
-    animate("#titleMain", { opacity: 0 }, { duration: d * 0.4 });
+    animate($("editHome"), { opacity: 0 }, { duration: d * 0.35 }); $("editHome").style.pointerEvents = "none";
+    animate("#titleMain", { opacity: 0 }, { duration: d * 0.35 });
     animate("#titles", { x: 0 }, { duration: d, ease });
     animate(".header", { y: 10 }, { duration: d, ease });
-    animate(tabbar, { y: tabbar.offsetHeight + 16 }, { duration: d, ease });
+    animate(tabbar, { y: tabbar.offsetHeight + 16 }, { duration: d * 0.8, ease });
     animate(morphShade, { opacity: 0.7 }, { duration: d, ease });
+    animate(morph, { filter: "blur(3px)" }, { duration: d, ease });
+    fadeIn([backBtn, $("editTrip"), $("titleTrip")], { duration: d * 0.6, delay: d * 0.35, ease });
+    fadeIn(cardEls, { duration: d * 0.7, delay: stagger(0.07, { startDelay: d * 0.45 }), ease }, { y: 18 });
     await animate(morph, { left: 0, top: 0, width: phone.clientWidth, height: phone.clientHeight, borderRadius: 0 }, { duration: d, ease }).finished;
-    cards.querySelectorAll("#cardList > .card, .cards-empty").forEach(el => el.style.opacity = 0);
-    detail.style.display = "block"; cards.scrollTop = 0;
-    void detail.offsetHeight; morph.style.display = "none";
-    for (const b of [backBtn, $("editTrip")]) { b.style.opacity = 0; b.classList.remove("off"); }
-    fadeIn([backBtn, $("editTrip"), $("titleTrip")], { duration: 0.45 });
-    fadeIn(".cards #cardList > .card, .cards-empty:not(.hidden)", { duration: 0.6, delay: stagger(0.07) }, { y: 12 });
     if (cur.trip.cards.length) fabVisible(fab, true);
     screen = "trip"; transitioning = false;
   }
   async function closeTrip() {
     if (transitioning || screen !== "trip") return; transitioning = true;
-    const ease = [0.32, 0.72, 0, 1], d = reduce ? 0 : 0.8;
+    const ease = [0.22, 1, 0.36, 1], d = reduce ? 0 : 0.9;
     setEditing(false); fabVisible(fab, false); $("hdrBg").style.opacity = 0;
     renderHome(); home.scrollTop = 0; home.style.opacity = 0;
     const card = [...tripList.children].find(c => c._trip === cur.trip);
     const r1 = card ? relRect(card) : { left: 20, top: 145, width: phone.clientWidth - 40, height: 140 };
-    Object.assign(morph.style, { display: "block", left: "0px", top: "0px", width: phone.clientWidth + "px", height: phone.clientHeight + "px", borderRadius: "0px" });
-    morphShade.style.opacity = 0.7;
-    await animate("#cardList > .card, .cards-empty", { opacity: 0, y: 8 }, { duration: 0.28, ease: [0.4, 0, 1, 1] }).finished;
-    detail.style.display = "none";
-    animate([backBtn, $("editTrip"), $("titleTrip")], { opacity: 0 }, { duration: 0.25 }).finished.then(() => [backBtn, $("editTrip")].forEach(b => b.classList.add("off")));
+    // всё одновременно: карточки и шапка тают, фото сжимается в свою карточку, главный экран проявляется
+    animate("#cardList > .card, .cards-empty", { opacity: 0, y: 10 }, { duration: d * 0.45, ease: "easeIn" }).finished.then(() => { detail.style.display = "none"; });
+    animate([backBtn, $("editTrip"), $("titleTrip")], { opacity: 0 }, { duration: d * 0.4 }).finished.then(() => [backBtn, $("editTrip")].forEach(b => b.classList.add("off")));
     phone.classList.remove("is-trip");
-    animate(home, { opacity: 1 }, { duration: d, ease });
-    animate($("hdrBgHome"), { opacity: hdrOpacity(home.scrollTop) }, { duration: d * 0.6, delay: d * 0.4 });
-    animate($("editHome"), { opacity: 1 }, { duration: d * 0.6, delay: d * 0.3 }); $("editHome").style.pointerEvents = "auto";
+    animate(home, { opacity: 1 }, { duration: d * 0.8, delay: d * 0.25, ease });
+    animate($("hdrBgHome"), { opacity: hdrOpacity(home.scrollTop) }, { duration: d * 0.5, delay: d * 0.4 });
+    animate($("editHome"), { opacity: 1 }, { duration: d * 0.5, delay: d * 0.4 }); $("editHome").style.pointerEvents = "auto";
     animate("#titleMain", { opacity: 1 }, { duration: d * 0.5, delay: d * 0.4 });
     animate("#titles", { x: -48 }, { duration: d, ease });
     animate(".header", { y: 0 }, { duration: d, ease });
     animate(tabbar, { y: 0 }, { duration: d, ease });
     animate(morphShade, { opacity: 0.5 }, { duration: d, ease });
+    animate(morph, { filter: "blur(0px)" }, { duration: d * 0.7, ease });
     await animate(morph, { left: r1.left, top: r1.top, width: r1.width, height: r1.height, borderRadius: 16 }, { duration: d, ease }).finished;
     morph.style.display = "none";
     screen = "main"; transitioning = false;
@@ -847,7 +851,7 @@
   bgInput.addEventListener("change", async () => {
     const f = bgInput.files[0]; if (!f || !cur.trip) return;
     cur.trip.photo = await shrink(f, 2000); bgInput.value = "";
-    const bg = $("detailBg"); animate(bg, { opacity: [1, 0.6, 1] }, { duration: 0.6 }); detail.style.setProperty("--photo", `url("${cur.trip.photo}")`);
+    animate(morph, { opacity: [1, 0.6, 1] }, { duration: 0.6 }); morph.style.setProperty("--photo", `url("${cur.trip.photo}")`);
     save();
   });
 
@@ -1082,7 +1086,7 @@
      Старт: загрузка данных, скелет → контент
      ========================================================= */
   const skeleton = $("skeleton");
-  const ready = load().then(() => { renderHome(); renderFav(); updateProfile(); });
+  const ready = load().then(() => { renderHome(); renderFav(); updateProfile(); $("buildVer").textContent = `Сборка ${BUILD} · экран ${innerWidth}×${innerHeight}`; });
   const t0 = Date.now();
   ready.then(() => setTimeout(() => {
     if (reduce) { skeleton.remove(); content.style.opacity = 1; return; }
@@ -1095,7 +1099,10 @@
     fadeIn("#tripList .trip", { duration: 0.8, delay: stagger(0.1), ease }, { y: 10 });
     fadeIn(".preview > .card", { duration: 0.7, delay: stagger(0.12, { startDelay: 0.25 }), ease }, { y: 8 });
   }, Math.max(0, 1100 - (Date.now() - t0))));
-  if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("./sw.js").catch(() => {});
+  if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+    navigator.serviceWorker.register("./sw.js").then(r => r.update()).catch(() => {});
+    let reloaded = false; navigator.serviceWorker.addEventListener("controllerchange", () => { if (!reloaded) { reloaded = true; location.reload(); } });
+  }
 </script>
 </body>
 </html>
