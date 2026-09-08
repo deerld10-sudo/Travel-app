@@ -133,7 +133,7 @@
   .stay-photo { width: 70px; height: 70px; flex: none; border-radius: var(--r-photo); overflow: hidden; background: linear-gradient(135deg,#EDEDED,#D9D9D9) center / cover no-repeat; }
   .stay-info { display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; min-height: 70px; min-width: 0; flex: 1 1 auto; }
   .stay-info > .cap:first-child { margin-top: -2px; line-height: 1.3; overflow-wrap: break-word; }
-  .pill-fill { border: 0; position: relative; overflow: hidden; font-size: 12px; font-weight: 500; height: 32px; width: 73px; border-radius: var(--r-tag); background: var(--accent); color: var(--white); display: inline-flex; align-items: center; justify-content: center; }
+  .pill-fill { border: 0; position: relative; overflow: hidden; font-size: 12px; font-weight: 500; height: 32px; min-width: 96px; padding: 0 24px; border-radius: var(--r-tag); background: var(--accent); color: var(--white); display: inline-flex; align-items: center; justify-content: center; }
   .pill-fill .shine { position: absolute; top: 0; bottom: 0; width: 60%; left: 0; pointer-events: none; transform: translateX(-160%);
                       background: linear-gradient(105deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.45) 50%, rgba(255,255,255,0) 100%); }
   .pin { position: absolute; top: 9px; right: 9px; }
@@ -257,6 +257,7 @@
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 32px 10px; }
   .form { display: flex; flex-direction: column; gap: 32px; margin-top: 28px; align-items: stretch; }   /* между пунктами — вдвое свободнее */
   .form > button, .sheet-body > button { width: 100%; align-self: stretch; }
+  .form > button + button { margin-top: -22px; }   /* между «Сохранить» и «Удалить» — 10, как в профиле */
   .hint { font-size: 12px; color: var(--label); line-height: 1.5; }
   .primary { height: 44px; border-radius: 12px; border: 0; background: var(--accent); color: var(--white); font-size: 12px; font-weight: 600; width: 100%; margin-top: 4px; }
   .secondary { height: 40px; border-radius: 10px; border: 1px solid var(--panel-border); background: var(--white); color: var(--black); font-size: 12px; font-weight: 500; width: 100%; }
@@ -530,16 +531,16 @@
           <div class="field"><label for="fFromCity">Город вылета</label><input id="fFromCity" placeholder="Bremen"></div>
           <div class="field"><label for="fToCity">Город прилёта</label><input id="fToCity" placeholder="Pulkovo"></div>
         </div>
-        <div class="grid2"><div class="field"><label for="fDepD">Вылет, дата</label><input id="fDepD" class="datepick" type="text" placeholder="дд.мм.гггг" autocomplete="off"></div><div class="field"><label for="fDepT">Время</label><input id="fDepT" class="timepick" type="text" placeholder="чч:мм" autocomplete="off"></div></div>
-        <div class="grid2"><div class="field"><label for="fArrD">Прилёт, дата</label><input id="fArrD" class="datepick" type="text" placeholder="дд.мм.гггг" autocomplete="off"></div><div class="field"><label for="fArrT">Время</label><input id="fArrT" class="timepick" type="text" placeholder="чч:мм" autocomplete="off"></div></div>
+        <div class="grid2"><div class="field"><label for="fDepD">Вылет, дата</label><input id="fDepD" class="datepick" type="text" inputmode="numeric" placeholder="дд.мм.гггг" autocomplete="off"></div><div class="field"><label for="fDepT">Время</label><input id="fDepT" class="timepick" type="text" inputmode="numeric" placeholder="чч:мм" autocomplete="off"></div></div>
+        <div class="grid2"><div class="field"><label for="fArrD">Прилёт, дата</label><input id="fArrD" class="datepick" type="text" inputmode="numeric" placeholder="дд.мм.гггг" autocomplete="off"></div><div class="field"><label for="fArrT">Время</label><input id="fArrT" class="timepick" type="text" inputmode="numeric" placeholder="чч:мм" autocomplete="off"></div></div>
         <div class="field"><label for="fNo">Номер рейса</label><input id="fNo" placeholder="AG 6749"></div>
         <button class="primary" data-add="flight" type="button">Добавить перелёт</button>
         <button class="btn-soft red del-card hidden" type="button"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 3.5h10M5 3.5V2h4v1.5M3.5 3.5l.7 8.5h5.6l.7-8.5"/></svg>Удалить карточку</button>
       </div>
       <div class="form hidden" id="formStay">
         <div class="field"><label for="sName">Район или название</label><input id="sName" placeholder="Петроградская сторона"></div>
-        <div class="grid2"><div class="field"><label for="sInD">Заезд, дата</label><input id="sInD" class="datepick" type="text" placeholder="дд.мм.гггг" autocomplete="off"></div><div class="field"><label for="sInT">Время</label><input id="sInT" class="timepick" type="text" placeholder="чч:мм" autocomplete="off"></div></div>
-        <div class="grid2"><div class="field"><label for="sOutD">Выезд, дата</label><input id="sOutD" class="datepick" type="text" placeholder="дд.мм.гггг" autocomplete="off"></div><div class="field"><label for="sOutT">Время</label><input id="sOutT" class="timepick" type="text" placeholder="чч:мм" autocomplete="off"></div></div>
+        <div class="grid2"><div class="field"><label for="sInD">Заезд, дата</label><input id="sInD" class="datepick" type="text" inputmode="numeric" placeholder="дд.мм.гггг" autocomplete="off"></div><div class="field"><label for="sInT">Время</label><input id="sInT" class="timepick" type="text" inputmode="numeric" placeholder="чч:мм" autocomplete="off"></div></div>
+        <div class="grid2"><div class="field"><label for="sOutD">Выезд, дата</label><input id="sOutD" class="datepick" type="text" inputmode="numeric" placeholder="дд.мм.гггг" autocomplete="off"></div><div class="field"><label for="sOutT">Время</label><input id="sOutT" class="timepick" type="text" inputmode="numeric" placeholder="чч:мм" autocomplete="off"></div></div>
         <div class="field"><label for="sAddr">Адрес</label><input id="sAddr" placeholder="Улица, дом, квартира"></div>
         <div class="field"><label for="sContact">Контакт хозяина или ссылка на Airbnb</label><input id="sContact" placeholder="+7… или https://airbnb.com/…"></div>
         <div class="field"><label>Фото</label><div class="photo-pick"><div class="photo-prev" id="sPhotoPrev"></div><label class="btn-soft photo-btn" for="sPhoto">Выбрать картинку</label><input id="sPhoto" type="file" accept="image/*" class="hidden"></div></div>
@@ -566,7 +567,7 @@
 
       <div class="form hidden" id="formDay">
         <p class="hint">Разделитель по дням: дата, где вы в этот день и что в планах.</p>
-        <div class="field"><label for="dDate">Дата</label><input id="dDate" class="datepick" type="text" placeholder="дд.мм.гггг" autocomplete="off"></div>
+        <div class="field"><label for="dDate">Дата</label><input id="dDate" class="datepick" type="text" inputmode="numeric" placeholder="дд.мм.гггг" autocomplete="off"></div>
         <div class="field"><label for="dArea">Где мы</label><input id="dArea" placeholder="Петроградская сторона"></div>
         <div class="field"><label for="dPlan">Планы на день</label><textarea id="dPlan" class="grow" rows="2" placeholder="Утро в Петропавловке, к вечеру — набережная"></textarea></div>
         <div class="field"><label>Цвет карточки</label><div class="swatches" id="swatchesDay"></div></div>
@@ -594,8 +595,8 @@
     <div class="sheet-body">
       <div class="form" style="margin-top:0">
         <div class="field"><label for="tTitle">Куда летим</label><input id="tTitle" placeholder="Санкт - Петербург"></div>
-        <div class="field"><label for="tStart">Начало</label><input id="tStart" class="datepick" type="text" placeholder="дд.мм.гггг" autocomplete="off"></div>
-        <div class="field"><label for="tEnd">Конец</label><input id="tEnd" class="datepick" type="text" placeholder="дд.мм.гггг" autocomplete="off"></div>
+        <div class="field"><label for="tStart">Начало</label><input id="tStart" class="datepick" type="text" inputmode="numeric" placeholder="дд.мм.гггг" autocomplete="off"></div>
+        <div class="field"><label for="tEnd">Конец</label><input id="tEnd" class="datepick" type="text" inputmode="numeric" placeholder="дд.мм.гггг" autocomplete="off"></div>
         <div class="field"><label>Фоновая картинка</label><div class="photo-pick"><div class="photo-prev wide" id="tPhotoPrev"></div><label class="btn-soft photo-btn" for="tPhoto">Выбрать картинку</label><input id="tPhoto" type="file" accept="image/*" class="hidden"></div></div>
         <button class="primary" id="tripSave" type="button">Создать поездку</button>
       </div>
@@ -622,7 +623,7 @@
   const spring = { type: "spring", stiffness: 300, damping: 26 }, soft = { type: "spring", stiffness: 220, damping: 24 }, menuSpring = { type: "spring", stiffness: 170, damping: 20 };
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const $ = (id) => document.getElementById(id);
-  const BUILD = "v43";
+  const BUILD = "v45";
   // запрет масштабирования жестами (iOS игнорирует user-scalable)
   document.addEventListener("gesturestart", (e) => e.preventDefault(), { passive: false });
   document.addEventListener("touchmove", (e) => { if (e.scale && e.scale !== 1) e.preventDefault(); }, { passive: false });
@@ -933,6 +934,7 @@
     const ease = [0.22, 1, 0.36, 1], d = reduce ? 0 : 0.9;
     const r0 = relRect(card);
     openedFrom = PAGES[tab] || null;                    // из архива — вернёмся в архив
+    fabVisible(homeFab, false);                          // плюс главного экрана на поездке не нужен
     morph.style.zIndex = openedFrom ? 9 : 3;            // над страницей архива, пока она тает
     if (openedFrom) animate(openedFrom, { opacity: [1, 0] }, { duration: d * 0.5, ease: "easeOut" }).finished.then(() => { openedFrom.classList.remove("on"); openedFrom.style.opacity = 1; });
     morph.style.setProperty("--photo", `url("${trip.photo || SPB_PHOTO}")`);
@@ -1002,6 +1004,7 @@
       fadeIn(card.querySelectorAll(".preview > .card"), { duration: 0.6, delay: stagger(0.1, { startDelay: 0.05 }), ease }, { y: 16 });
     }
     screen = "main"; transitioning = false;
+    if (tab === "main" && homeCollapsed) fabVisible(homeFab, true);
   }
   backBtn.addEventListener("click", closeTrip);
   animate("#titles", { x: -48 }, { duration: 0 });
@@ -1262,6 +1265,7 @@
   function setTab(name, force = false) {
     if ((name === tab && !force) || (screen === "trip" && !force)) return;
     const dir = TAB_ORDER.indexOf(name) > TAB_ORDER.indexOf(tab) ? 1 : -1;   // вправо по меню — контент приходит справа
+    fabVisible(homeFab, name === "main" && homeCollapsed);
     const prev = PAGES[tab] || home, prevIsHome = !PAGES[tab]; tab = name;
     tabbar.querySelectorAll(".tab").forEach(b => { const on = b.dataset.tab === name; b.setAttribute("aria-selected", String(on)); if (on) animate(b.querySelector("svg"), { scale: [1, 1.18, 1], y: [0, -2, 0] }, { duration: 0.45, ease: [0.34, 1.56, 0.64, 1] }); });
     const next = PAGES[name] || home, nextIsHome = !PAGES[name];
