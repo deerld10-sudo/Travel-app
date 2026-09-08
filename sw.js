@@ -1,7 +1,7 @@
 /* Поездки — сервис-воркер.
    Оболочка приложения кэшируется при установке; шрифты и Motion — при первом обращении.
    При обновлении приложения поменяй VERSION — старый кэш будет удалён. */
-const VERSION = "v12";
+const VERSION = "v13";
 const SHELL = ["./", "./index.html", "./manifest.webmanifest", "./icons/icon.svg", "./icons/favicon.svg", "./icons/icon-192.png", "./icons/icon-512.png", "./icons/icon-180.png", "./icons/icon-120.png", "./icons/icon-152.png", "./icons/icon-167.png"];
 
 self.addEventListener("install", (e) => {
