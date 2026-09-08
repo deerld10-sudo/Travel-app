@@ -28,8 +28,8 @@
     --black: #000000; --white: #FFFFFF;
     --label: #9A9A9A; --status: #D2D2D2; --accent: #DE8F5F; --pill-stroke: #56656F;
     --divider: rgba(0,0,0,0.09);
-    --panel-dark: rgba(22,22,22,0.92); --panel-light: rgba(255,255,255,0.9); --panel-border: #EDEDED;
-    --panel-blur: 28px;   /* Figma background blur 56 ≈ CSS 28px */ --glass: rgba(255,255,255,0.6);
+    --panel-dark: rgba(22,22,22,0.9); --panel-light: rgba(255,255,255,0.9); --panel-border: #EDEDED;   /* карточки на 10% прозрачны */
+    --panel-blur: 6px; --glass: rgba(255,255,255,0.6);
     --act-bg: rgba(74,88,54,0.86); --act-tile: #E6EFD9; --act-note: #E6EFD9;
     --chip-ticket: #E6EFD9; --chip-when: #CEDABA; --chip-take: #9EAD87;
     --r-panel: 16px; --r-photo: 6px; --r-tag: 7px;
@@ -79,7 +79,7 @@
   .detail .ghost { width: calc(100% - 46px); margin-bottom: -34px; background: var(--glass); -webkit-backdrop-filter: blur(var(--panel-blur)); backdrop-filter: blur(var(--panel-blur)); }
   .trip { position: relative; width: 100%; min-height: 140px; border-radius: var(--r-panel); overflow: hidden; color: var(--white); margin-bottom: 10px; z-index: 1;
           background: var(--photo, var(--spb-photo)) center / cover no-repeat, #3A3532; padding: 32px 10px 10px; }
-  .trip .shade { position: absolute; inset: 0; background: linear-gradient(180deg, #000 0%, rgba(0,0,0,0.15) 100%); opacity: 0.7; pointer-events: none; }   /* то же затемнение, что на экране поездки */
+  .trip .shade { position: absolute; inset: 0; background: linear-gradient(180deg, #000 0%, rgba(0,0,0,0.15) 100%); opacity: 0.6; pointer-events: none; }   /* то же затемнение, что на экране поездки */
   .trip-title { position: relative; text-align: center; padding: 0 56px; }
   .trip-title .h1 { overflow-wrap: break-word; line-height: 1.2; }
   .trip-title .cap { margin-top: 6px; font-weight: 700; }
@@ -616,7 +616,7 @@
   const spring = { type: "spring", stiffness: 300, damping: 26 }, soft = { type: "spring", stiffness: 220, damping: 24 }, menuSpring = { type: "spring", stiffness: 170, damping: 20 };
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const $ = (id) => document.getElementById(id);
-  const BUILD = "v32";
+  const BUILD = "v36";
   // запрет масштабирования жестами (iOS игнорирует user-scalable)
   document.addEventListener("gesturestart", (e) => e.preventDefault(), { passive: false });
   document.addEventListener("touchmove", (e) => { if (e.scale && e.scale !== 1) e.preventDefault(); }, { passive: false });
@@ -929,7 +929,7 @@
     Object.assign(morph.style, { display: "block", left: r0.left + "px", top: r0.top + "px", width: r0.width + "px", height: r0.height + "px", borderRadius: "16px" });
     animate(morph, { opacity: 1 }, { duration: 0 });
     animate($("morphImg"), { filter: "blur(0px)", scale: 1 }, { duration: 0 });
-    morphShade.style.opacity = 0.7;
+    morphShade.style.opacity = 0.6;
     renderDetail(trip);
     setEditing(false); phone.classList.add("is-trip");
     // карточки уже на месте, но невидимы — проявятся, пока фото ещё растёт
